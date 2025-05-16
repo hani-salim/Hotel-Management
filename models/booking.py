@@ -43,15 +43,13 @@ class HotelBooking(models.Model):
                 # التحقق من وجود فاتورة نشطة للضيف
                 invoice = self.env['account.move'].search([
                     ('partner_id', '=', booking.guest_id.partner_id.id),
-                    ('state', '!=', 'paid'),
+                    ('payment_state', '!=', 'paid'),
                     ('guest_id', '=', booking.guest_id.id),
                 ], limit=1)
 
                 if 1:
                     # إنشاء فاتورة جديدة إذا لم توجد
                     invoice_line_vals_list = []
-
-
 
                     for room in booking.room_ids:
                         if not room.product_id:

@@ -309,7 +309,7 @@ export class ProductComponent extends Component {
                 quantity: item.quantity,
                 price_unit: item.lst_price,
                 name: item.name,
-                tax_ids: item.taxes_id || []
+                tax_ids: item.taxes_id || [],
             }])
         };
 
@@ -319,6 +319,7 @@ export class ProductComponent extends Component {
             "account.move",
             [
                 ["guest_id", "=", this.state.selectedGuest.id],
+                ["payment_state", "!=", "paid"],
                 ["room_ids", "in", roomIds]
             ],
             ["id"],
@@ -327,7 +328,7 @@ export class ProductComponent extends Component {
 
         let invoiceId;
         if (existingInvoice.length) {
-            // تحديث الفاتورة الموجودة
+            // تحديث الفاتورة الموجودة (فقط إذا كانت مسودة)
             invoiceId = existingInvoice[0].id;
 
             // الحصول على خطوط الفاتورة الحالية
@@ -347,13 +348,6 @@ export class ProductComponent extends Component {
         } else {
             // إنشاء فاتورة جديدة
             invoiceId = await this.orm.create("account.move", [invoiceData]);
-
-            // ربط الفاتورة بالغرف
-            await this.orm.write(
-                "account.move.line",
-                invoiceData.invoice_line_ids.map(line => line[2].id),
-                { room_id: this.state.selectedGuest.rooms[0].id }
-            );
         }
 
         // عرض إشعار النجاح
