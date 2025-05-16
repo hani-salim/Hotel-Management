@@ -6,10 +6,11 @@
 
         <!-- قائمة الغرف -->
         <menuitem id="menu_hotel_rooms" name="Rooms" parent="menu_hotel_main" sequence="20"/>
-        <record id="action_hotel_rooms" model="ir.actions.act_window">
+        <record id="action_room_kanban" model="ir.actions.act_window">
             <field name="name">Hotel Rooms</field>
             <field name="res_model">hotel.room</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">kanban,form</field>
+            <field name="view_id" ref="view_room_kanban"/>
         </record>
         <menuitem id="menu_hotel_rooms_list" name="Room List" parent="menu_hotel_rooms" action="action_room_kanban"/>
 
@@ -52,7 +53,7 @@
         </record>
         <menuitem id="menu_hotel_reports" name="Reports" parent="menu_hotel_main" sequence="80"/>
         <menuitem id="menu_hotel_occupancy_report" name="Occupancy Report" parent="menu_hotel_reports"
-        action="action_occupancy_report"/>
+                  action="action_occupancy_report"/>
 
         <!--  مراجعات الزبائن -->
         <record id="action_review" model="ir.actions.act_window">
@@ -63,15 +64,16 @@
         </record>
         <menuitem id="menu_hotel_reviews" name="Reviews" parent="menu_hotel_main" sequence="90"/>
         <menuitem id="menu_hotel_review" name="Review List" parent="menu_hotel_reviews"
-        action="action_review"/>
+                  action="action_review"/>
 
         <!--قائمة المنتجات-->
         <record id="action_product" model="ir.actions.client">
             <field name="name">Products</field>
-            <field name="tag">hotel.products_component</field>
+            <field name="tag">hotel.product_component</field>
         </record>
 
         <menuitem id="menu_hotel_products" name="Products" parent="menu_hotel_main" sequence="100"/>
         <menuitem id="menu_sales_Product" name="Product List" parent="menu_hotel_products" action="action_product"/>
+
     </data>
 </odoo>

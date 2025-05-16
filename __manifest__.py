@@ -13,7 +13,7 @@
     """,
     'author': 'Hani salim',
     'website': '',
-    'depends': ['base', 'mail', 'product', 'account'],
+    'depends': ['base', 'mail','sale', 'product', 'account','stock','purchase'],
     'data': [
         'security/ir.model.access.csv',
         'security/security.xml',
@@ -27,6 +27,7 @@
         'views/review_views.xml',
         'views/invoice_views.xml',
         'views/service_views.xml',
+        'views/stock_dashboard.xml',
         'wizard/wizard_view.xml',
         'views/payment_views.xml',
         'views/menu_views.xml',

@@ -1,6 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data noupdate="1">
+
+<!--        &lt;!&ndash; فئات المنتجات للمخزون &ndash;&gt;-->
+<!--        <record id="product_category_room_supplies" model="product.category">-->
+<!--            <field name="name">مستلزمات الغرف</field>-->
+<!--            <field name="parent_id" ref="product.product_category_all"/>-->
+<!--        </record>-->
+
+<!--        <record id="product_category_restaurant" model="product.category">-->
+<!--            <field name="name">مواد المطعم</field>-->
+<!--            <field name="parent_id" ref="product.product_category_all"/>-->
+<!--        </record>-->
+
+<!--        <record id="product_category_maintenance" model="product.category">-->
+<!--            <field name="name">معدات الصيانة</field>-->
+<!--            <field name="parent_id" ref="product.product_category_all"/>-->
+<!--        </record>-->
+
+<!--        &lt;!&ndash; مواقع المخزون &ndash;&gt;-->
+<!--        <record id="stock_warehouse_hotel" model="stock.warehouse">-->
+<!--            <field name="name">الفندق الرئيسي</field>-->
+<!--            <field name="code">HOTEL</field>-->
+<!--        </record>-->
+
+<!--        <record id="stock_location_rooms" model="stock.location">-->
+<!--            <field name="name">مستلزمات الغرف</field>-->
+<!--            <field name="usage">internal</field>-->
+<!--            <field name="location_id" ref="stock.stock_location_locations"/>-->
+<!--        </record>-->
+
+<!--        <record id="stock_location_restaurant" model="stock.location">-->
+<!--            <field name="name">مواد المطعم</field>-->
+<!--            <field name="usage">internal</field>-->
+<!--            <field name="location_id" ref="stock.stock_location_locations"/>-->
+<!--        </record>-->
+
+<!--        &lt;!&ndash; منتجات مخزنية &ndash;&gt;-->
+<!--        <record id="product_product_towel" model="product.product">-->
+<!--            <field name="name">منشفة فندقية</field>-->
+<!--            <field name="type">product</field> &lt;!&ndash; صنف مخزني &ndash;&gt;-->
+<!--            <field name="categ_id" ref="product_category_room_supplies"/>-->
+<!--            <field name="lst_price">50.0</field>-->
+<!--            <field name="standard_price">30.0</field> &lt;!&ndash; سعر التكلفة &ndash;&gt;-->
+<!--            <field name="sale_ok">true</field>-->
+<!--            <field name="tracking">lot</field> &lt;!&ndash; تتبع بالدفعات &ndash;&gt;-->
+<!--        </record>-->
+
+<!--        &lt;!&ndash; كمية أولية للمنشفة في المخزن &ndash;&gt;-->
+<!--        <record id="stock_quant_towel" model="stock.quant">-->
+<!--            <field name="product_id" ref="product_product_towel"/>-->
+<!--            <field name="location_id" ref="stock_location_rooms"/>-->
+<!--            <field name="quantity">100.0</field>-->
+<!--        </record>-->
+
+
         <!-- إنشاء فئة وحدات قياس جديدة خاصة بالفندق -->
         <record id="product_uom_categ_hotel" model="uom.category">
             <field name="name">Hotel</field>

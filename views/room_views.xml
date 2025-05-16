@@ -90,13 +90,7 @@
             </field>
         </record>
 
-        <!-- إضافة إجراء Kanban -->
-        <record id="action_room_kanban" model="ir.actions.act_window">
-            <field name="name">Hotel Rooms</field>
-            <field name="res_model">hotel.room</field>
-            <field name="view_mode">kanban,form</field>
-            <field name="view_id" ref="view_room_kanban"/>
-        </record>
+
 
         <!-- البحث search -->
         <record id="view_hotel_room_search" model="ir.ui.view">

@@ -7,3 +7,4 @@ from . import room
 from . import service_request
 from . import service
 from . import product_room
+from . import sale_order

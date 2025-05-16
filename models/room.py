@@ -120,14 +120,17 @@ class HotelRoom(models.Model):
         if invoice:
             if invoice.payment_state == 'paid':
                 current_date = fields.Datetime.now()
+                print(current_date)
                 booking =self.env['hotel.booking'].search([
                     ('room_ids','in',self.id),
                     ('guest_id','=',self.current_guest_id.id),
+                    ('state','!=','done'),
                 ])
                 check_out_date = booking.check_out_date if booking else self.current_guest_id.check_out_date
+                print(check_out_date)
 
-                if current_date > check_out_date:
-                    raise UserError("لا يمكن إتمام عملية الخروج بعد تاريخ المغادرة المحدد")
+                if current_date < check_out_date:
+                    raise UserError("Check out date is note today")
                 else:
                     guest = self.current_guest_id
 
@@ -142,7 +145,8 @@ class HotelRoom(models.Model):
                     # 2. مسح بيانات الغرف من الضيف
                     guest.write({
                         'room_ids': [(5, 0, 0)],
-                        'check_out_date': fields.Datetime.now()
+                        'check_out_date': fields.Datetime.now(),
+                        'booking_ids': [(5, 0, 0)],
                     })
 
                     # 3. تحديث الحجوزات المرتبطة

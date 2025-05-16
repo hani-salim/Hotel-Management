@@ -1,0 +1,57 @@
+/* stock_dashboard.css */
+.stock-card {
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    background: white;
+    padding: 16px;
+}
+
+.stock-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.stock-info {
+    padding: 10px;
+    border-radius: 6px;
+    background: #f8f9fa;
+}
+
+.location-icon {
+    color: #6c757d;
+    font-size: 24px;
+}
+
+.location-value {
+    font-weight: 500;
+    margin: 5px 0;
+}
+
+.btn-action {
+    background-color: #17a2b8;
+    color: white;
+    border-radius: 20px;
+    padding: 5px 15px;
+}
+
+.progress {
+    height: 6px;
+    border-radius: 3px;
+}
+
+/* للكميات الأقل من 10 */
+.o_kanban_view .text-danger {
+    color: #dc3545 !important;
+    font-weight: bold;
+}
+
+/* للكميات 10 أو أكثر */
+.o_kanban_view .text-success {
+    color: #28a745 !important;
+}
+
+.low-quantity-card {
+    border: 1px solid #dc3545 !important;
+    background-color: #fff3f3 !important;
+}

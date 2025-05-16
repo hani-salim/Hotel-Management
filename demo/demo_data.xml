@@ -6,10 +6,5 @@
         <field name="view_type">sea</field>
     </record>
 
-    <record id="demo_guest_1" model="hotel.guest">
-        <field name="name">Hani Salim</field>
-        <field name="phone">1234567890</field>
-        <field name="email">Hani@example.com</field>
-        <field name="membership_type">regular</field>
-    </record>
+
 </odoo>
