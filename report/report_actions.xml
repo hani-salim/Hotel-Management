@@ -1,0 +1,8 @@
+<odoo>
+    <record id="action_report_occupancy" model="ir.actions.report">
+        <field name="name">Occupancy Report</field>
+        <field name="model">hotel.occupancy.wizard</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">hotel.report_occupancy</field>
+    </record>
+</odoo>

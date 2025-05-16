@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- عرض شجرة الآراء -->
+    <record id="view_review_tree" model="ir.ui.view">
+        <field name="name">hotel.review.tree</field>
+        <field name="model">hotel.review</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="guest_id"/>
+                <field name="rating" widget="rating"/>
+                <field name="date"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- عرض نموذج الرأي -->
+    <record id="view_review_form" model="ir.ui.view">
+        <field name="name">hotel.review.form</field>
+        <field name="model">hotel.review</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="guest_id"/>
+                        <field name="rating" widget="rating"/>
+                        <field name="date"/>
+                    </group>
+                    <group>
+                        <field name="comment"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- عرض البحث في الآراء -->
+    <record id="view_review_search" model="ir.ui.view">
+        <field name="name">hotel.review.search</field>
+        <field name="model">hotel.review</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="guest_id"/>
+                <field name="rating"/>
+<!--                <filter string="High Rating (4-5)" domain="[('rating', '>=', 4)]"/>-->
+            </search>
+        </field>
+    </record>
+</odoo>

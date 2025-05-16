@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- إنشاء فئة وحدات قياس جديدة خاصة بالفندق -->
+        <record id="product_uom_categ_hotel" model="uom.category">
+            <field name="name">Hotel</field>
+        </record>
+
+        <!-- إنشاء وحدة القياس اليومية -->
+        <record id="product_uom_day" model="uom.uom">
+            <field name="name">Day</field>
+            <field name="category_id" ref="product_uom_categ_hotel"/>
+            <field name="uom_type">reference</field>
+            <field name="factor">1</field>
+            <field name="rounding">0.01</field>
+        </record>
+
+        <!-- إنشاء حساب الإيرادات لـ Odoo 16 -->
+        <record id="account_hotel_income" model="account.account">
+            <field name="name">إيرادات الغرف الفندقية</field>
+            <field name="code">410001</field>
+            <field name="account_type">income</field>
+            <field name="company_id" eval="1"/>
+        </record>
+
+        <!-- إنشاء فئة المنتجات وربطها بحساب الإيرادات -->
+        <record id="product_category_rooms" model="product.category">
+            <field name="name">Hotel Rooms</field>
+            <field name="parent_id" ref="product.product_category_1"/>
+            <field name="property_account_income_categ_id" ref="account_hotel_income"/>
+        </record>
+
+        <!-- إنشاء مجموعة ضريبية -->
+        <record id="tax_group_rooms" model="account.tax.group">
+            <field name="name">Room Taxes</field>
+        </record>
+
+        <!-- إنشاء ضريبة المبيعات -->
+        <record id="tax_sale_rooms" model="account.tax">
+            <field name="name">Room Tax 10%</field>
+            <field name="type_tax_use">sale</field>
+            <field name="amount_type">percent</field>
+            <field name="amount">10.0</field>
+            <field name="description">10%</field>
+            <field name="tax_group_id" ref="tax_group_rooms"/>
+            <field name="country_id" ref="base.us"/>
+            <field name="company_id" eval="1"/>
+        </record>
+
+        <!-- منتج الغرفة VIP -->
+        <record id="product_product_vip_room" model="product.product">
+            <field name="name">VIP Room</field>
+            <field name="default_code">ROOM-VIP</field>
+            <field name="is_room" eval="True"/>
+            <field name="room_category">vip</field>
+            <field name="lst_price" eval="700.0"/>
+            <field name="type">service</field>
+            <field name="sale_ok" eval="True"/>
+            <field name="purchase_ok" eval="False"/>
+            <field name="categ_id" ref="product_category_rooms"/>
+            <field name="uom_id" ref="product_uom_day"/>
+            <field name="uom_po_id" ref="product_uom_day"/>
+            <field name="taxes_id" eval="[(6, 0, [ref('tax_sale_rooms')])]"/>
+            <field name="property_account_income_id" ref="account_hotel_income"/>
+            <field name="description">VIP Room Accommodation</field>
+        </record>
+
+        <!-- منتج الشاليه -->
+        <record id="product_product_chalet" model="product.product">
+            <field name="name">Chalet</field>
+            <field name="default_code">ROOM-CHALET</field>
+            <field name="is_room" eval="True"/>
+            <field name="room_category">chalet</field>
+            <field name="lst_price" eval="300.0"/>
+            <field name="type">service</field>
+            <field name="sale_ok" eval="True"/>
+            <field name="purchase_ok" eval="False"/>
+            <field name="categ_id" ref="product_category_rooms"/>
+            <field name="uom_id" ref="product_uom_day"/>
+            <field name="uom_po_id" ref="product_uom_day"/>
+            <field name="taxes_id" eval="[(6, 0, [ref('tax_sale_rooms')])]"/>
+            <field name="property_account_income_id" ref="account_hotel_income"/>
+            <field name="description">Chalet Accommodation</field>
+        </record>
+
+        <!-- منتج السويت -->
+        <record id="product_product_suite" model="product.product">
+            <field name="name">Suite</field>
+            <field name="default_code">ROOM-SUITE</field>
+            <field name="is_room" eval="True"/>
+            <field name="room_category">suite</field>
+            <field name="lst_price" eval="500.0"/>
+            <field name="type">service</field>
+            <field name="sale_ok" eval="True"/>
+            <field name="purchase_ok" eval="False"/>
+            <field name="categ_id" ref="product_category_rooms"/>
+            <field name="uom_id" ref="product_uom_day"/>
+            <field name="uom_po_id" ref="product_uom_day"/>
+            <field name="taxes_id" eval="[(6, 0, [ref('tax_sale_rooms')])]"/>
+            <field name="property_account_income_id" ref="account_hotel_income"/>
+            <field name="description">Suite Room Accommodation</field>
+        </record>
+    </data>
+</odoo>

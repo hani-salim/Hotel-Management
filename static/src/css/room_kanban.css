@@ -1,0 +1,100 @@
+/* تنسيقات المجموعة */
+.room_kanban .o_kanban_group {
+    padding: 15px;
+    margin: 10px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* تنسيقات رأس الكانبان */
+.room_kanban .o_kanban_header {
+    display: flex !important;
+    padding: 10px 15px !important;
+    background: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+/* تنسيقات زر التسجيل */
+.room_kanban .o_kanban_header .oe_highlight {
+    background-color: #875A7B !important;
+    color: white !important;
+    border: none;
+    padding: 8px 16px;
+    margin-right: 10px;
+    border-radius: 4px;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+/* أيقونة الزر */
+.room_kanban .o_kanban_header .oe_highlight .fa {
+    margin-right: 8px;
+    font-size: 14px;
+}
+
+/* تأثيرات الزر عند التحويم */
+.room_kanban .o_kanban_header .oe_highlight:hover {
+    background-color: #6c3c6d !important;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* تأثيرات الزر عند النقر */
+.room_kanban .o_kanban_header .oe_highlight:active {
+    transform: scale(0.98);
+}
+
+/* تنسيقات البطاقة الأساسية */
+.room_card {
+    width: 220px;
+    height: 140px;
+    margin: 10px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: white !important;
+    text-align: center;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    user-select: none;
+}
+
+/* الألوان حسب الحالة */
+.bg-ready { background-color: #28a745; }
+.bg-needs_cleaning { background-color: #fd7e14; }
+.bg-needs_maintenance { background-color: #dc3545; }
+.bg-out_of_service { background-color: #6c757d; }
+.bg-booking { background-color: #007bff; }
+
+/* تحسينات النص */
+.card_body h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+.room_info {
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.room_card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* تأثير النقر */
+.click-effect {
+    transform: scale(0.98);
+    box-shadow: 0 0 5px rgba(0,0,0,0.3) !important;
+}

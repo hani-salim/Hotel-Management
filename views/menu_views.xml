@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- القائمة الرئيسية -->
+        <menuitem id="menu_hotel_main" name="Hotel Management" sequence="10"/>
+
+        <!-- قائمة الغرف -->
+        <menuitem id="menu_hotel_rooms" name="Rooms" parent="menu_hotel_main" sequence="20"/>
+        <record id="action_hotel_rooms" model="ir.actions.act_window">
+            <field name="name">Hotel Rooms</field>
+            <field name="res_model">hotel.room</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem id="menu_hotel_rooms_list" name="Room List" parent="menu_hotel_rooms" action="action_room_kanban"/>
+
+        <!-- قائمة الضيوف -->
+        <menuitem id="menu_hotel_guests" name="Guests" parent="menu_hotel_main" sequence="30"/>
+        <record id="action_hotel_guests" model="ir.actions.act_window">
+            <field name="name">Hotel Guests</field>
+            <field name="res_model">hotel.guest</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem id="menu_hotel_guests_list" name="Guest List" parent="menu_hotel_guests"
+                  action="action_hotel_guests"/>
+
+        <!-- قائمة الحجوزات -->
+        <menuitem id="menu_hotel_booking" name="Booking" parent="menu_hotel_main" sequence="40"/>
+        <record id="action_hotel_booking" model="ir.actions.act_window">
+            <field name="name">Hotel Booking</field>
+            <field name="res_model">hotel.booking</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem id="menu_hotel_booking_list" name="Booking List" parent="menu_hotel_booking"
+                  action="action_hotel_booking"/>
+
+        <!-- قائمة الخدمات -->
+        <menuitem id="menu_hotel_services" name="Services" parent="menu_hotel_main" sequence="60"/>
+        <record id="action_hotel_services" model="ir.actions.act_window">
+            <field name="name">Hotel Services</field>
+            <field name="res_model">hotel.service</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem id="menu_hotel_services_list" name="Service List" parent="menu_hotel_services"
+                  action="action_hotel_services"/>
+
+        <!-- إجراءات التقارير -->
+        <record id="action_occupancy_report" model="ir.actions.act_window">
+            <field name="name">Occupancy Report</field>
+            <field name="res_model">hotel.occupancy.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        <menuitem id="menu_hotel_reports" name="Reports" parent="menu_hotel_main" sequence="80"/>
+        <menuitem id="menu_hotel_occupancy_report" name="Occupancy Report" parent="menu_hotel_reports"
+        action="action_occupancy_report"/>
+
+        <!--  مراجعات الزبائن -->
+        <record id="action_review" model="ir.actions.act_window">
+            <field name="name">Reviews</field>
+            <field name="res_model">hotel.review</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+        </record>
+        <menuitem id="menu_hotel_reviews" name="Reviews" parent="menu_hotel_main" sequence="90"/>
+        <menuitem id="menu_hotel_review" name="Review List" parent="menu_hotel_reviews"
+        action="action_review"/>
+
+        <!--قائمة المنتجات-->
+        <record id="action_product" model="ir.actions.client">
+            <field name="name">Products</field>
+            <field name="tag">hotel.products_component</field>
+        </record>
+
+        <menuitem id="menu_hotel_products" name="Products" parent="menu_hotel_main" sequence="100"/>
+        <menuitem id="menu_sales_Product" name="Product List" parent="menu_hotel_products" action="action_product"/>
+    </data>
+</odoo>

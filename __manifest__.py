@@ -1,0 +1,50 @@
+{
+    'name': 'Hotel Management',
+    'version': '1.1',
+    'summary': 'Comprehensive Hotel Management System',
+    'description': """
+        Hotel Management System
+        ======================
+        - Room and Guest Management
+        - Booking System
+        - Invoice and Payment Tracking
+        - Additional Services
+        - Custom Reports
+    """,
+    'author': 'Hani salim',
+    'website': '',
+    'depends': ['base', 'mail', 'product', 'account'],
+    'data': [
+        'security/ir.model.access.csv',
+        'security/security.xml',
+        'data/product_data.xml',
+        'data/email_template_data.xml',
+        'data/cron_data.xml',
+        'data/sequence_data.xml',
+        'views/room_views.xml',
+        'views/guest_views.xml',
+        'views/booking_views.xml',
+        'views/review_views.xml',
+        'views/invoice_views.xml',
+        'views/service_views.xml',
+        'wizard/wizard_view.xml',
+        'views/payment_views.xml',
+        'views/menu_views.xml',
+        'report/occupancy_report.xml',
+        'report/report_actions.xml',
+    ],
+    'demo': [
+        'demo/demo_data.xml'
+    ],
+    'installable': True,
+    'application': True,
+    'auto_install': False,
+    'assets': {
+        'web.assets_backend': [
+            'hotel/static/src/css/*.css',
+            'hotel/static/src/xml/*.xml',
+            'hotel/static/src/js/*.js',
+
+        ],
+    },
+}

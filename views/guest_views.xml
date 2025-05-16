@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- عرض شجرة الضيوف -->
+    <record id="view_guest_tree" model="ir.ui.view">
+        <field name="name">hotel.guest.tree</field>
+        <field name="model">hotel.guest</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="partner_id" string="Guest Name"/>
+                <field name="id_number" string="ID/Passport Number"/>
+                <field name="notes" string="Notes"/>
+                <field name="duration" string="Duration"/>
+                <field name="review_ids" string="Reviews" widget="many2many_tags"/>
+                <field name="membership_type"/>
+                <field name="room_ids" string="Room" widget="many2many_tags"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- عرض نموذج الضيف -->
+    <record id="view_guest_form" model="ir.ui.view">
+        <field name="name">hotel.guest.form</field>
+        <field name="model">hotel.guest</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="id_number" string="ID/Passport"/>
+                        </group>
+                        <group>
+                            <field name="room_ids" widget="many2many_tags"/>
+                            <field name="check_in_date"/>
+                            <field name="check_out_date"/>
+                            <field name="booking_ids" widget="many2many_tags"/>
+                            <field name="duration" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <!--                        <page string="Personal Info">-->
+                        <!--                            <field name="address" widget="textarea"/>-->
+                        <!--                            <field name="membership_type"/>-->
+                        <!--                        </page>-->
+                        <page string="Reviews">
+                            <field name="review_ids" mode="tree">
+                                <tree>
+                                    <field name="date"/>
+                                    <field name="rating" widget="rating"/>
+                                    <field name="comment"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- واجهة تسجيل الضيف متعددة الخطوات -->
+    <record id="view_guest_registration_form" model="ir.ui.view">
+        <field name="name">hotel.guest.registration.form</field>
+        <field name="model">hotel.guest</field>
+        <field name="arch" type="xml">
+            <form string="Guest Registration">
+                <sheet>
+                    <group id="personal_info_group" attrs="{'invisible': [('stage', '!=', '1')]}">
+                        <field name="partner_id" required="1"/>
+                        <field name="id_number" string="ID/Passport"/>
+                        <field name="membership_type"/>
+                        <field name="stage" invisible="1"/>
+                    </group>
+
+                    <group id="room_selection_group" attrs="{'invisible': [('stage', '!=', '2')]}">
+                        <field name="room_ids" widget="many2many_tags" attrs="{'required': [('stage', '=', '2')]}"
+                               domain="[('is_available','=',True)]"/>
+                        <field name="check_in_date" attrs="{'required': [('stage', '=', '2')]}"
+                               default="context_today()"/>
+                        <field name="check_out_date" attrs="{'required': [('stage', '=', '2')]}"/>
+                    </group>
+
+                    <footer>
+                        <button name="action_next_stage" string="Next" type="object"
+                                attrs="{'invisible': [('stage', '!=', '1')]}"
+                                class="oe_highlight"/>
+                        <button name="action_submit_booking" string="Submit Booking" type="object"
+                                attrs="{'invisible': [('stage', '!=', '2')]}"
+                                class="oe_highlight"/>
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </sheet>
+
+            </form>
+        </field>
+    </record>
+
+
+    <!--    عرض بحث الضيوف-->
+    <record id="view_guest_search" model="ir.ui.view">
+        <field name="name">hotel.guest.search</field>
+        <field name="model">hotel.guest</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="partner_id" string="Guest Name"/>
+                <field name="room_ids" string="Room"/>
+                <!--                <filter string="Current Guests" domain="[('check_out_date','&gt;',context_today())]"/>-->
+                <!--                <filter string="VIP Guests" domain="[('membership_type','=','vip')]"/>-->
+                <!--                <group string="Group By">-->
+                <!--                    <filter string="Room" context="{'group_by':'room_id'}"/>-->
+                <!--                    <filter string="Membership Type" context="{'group_by':'membership_type'}"/>-->
+                <!--                </group>-->
+            </search>
+        </field>
+    </record>
+
+
+</odoo>

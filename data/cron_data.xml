@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- إجراء مجدول لتحديث حالة الغرف -->
+    <record id="ir_cron_update_room_states" model="ir.cron">
+        <field name="name">Update Hotel Room States</field>
+        <field name="model_id" ref="model_hotel_room"/>
+        <field name="state">code</field>
+        <field name="code">model._update_room_states()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">hours</field>
+        <field name="active">True</field>
+    </record>
+
+    <!-- مهمة إرسال تذكير المغادرة -->
+    <record id="ir_cron_send_checkout_reminders" model="ir.cron">
+        <field name="name">Send Check-out Reminders</field>
+        <field name="model_id" ref="model_hotel_guest"/>
+        <field name="state">code</field>
+        <field name="code">model.send_checkout_reminder()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="active">False</field>
+        <field name="doall">False</field>
+        <field name="nextcall" eval="(DateTime.now() + timedelta(days=1)).strftime('%Y-%m-%d 10:00:00')"/>
+    </record>
+
+    <!-- مهمة إرسال طلبات التقييم -->
+    <record id="ir_cron_send_review_requests" model="ir.cron">
+        <field name="name">Send Review Requests</field>
+        <field name="model_id" ref="model_hotel_guest"/>
+        <field name="state">code</field>
+        <field name="code">model.send_review_requests()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="active">False</field>
+        <field name="doall">False</field>
+        <field name="nextcall" eval="(DateTime.now() + timedelta(days=1)).strftime('%Y-%m-%d 14:00:00')"/>
+    </record>
+
+    <!-- إجراء مجدول لتنظيف الحجوزات الملغاة -->
+    <record id="ir_cron_clean_cancelled_bookings" model="ir.cron">
+        <field name="name">Clean Cancelled Bookings</field>
+        <field name="model_id" ref="model_hotel_booking"/>
+        <field name="state">code</field>
+        <field name="code">
+            model.clean_cancelled_bookings()
+        </field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">weeks</field>
+        <field name="active">True</field>
+    </record>
+</odoo>

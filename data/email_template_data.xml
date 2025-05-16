@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Booking Confirmation Template -->
+        <record id="email_template_booking_confirmation" model="mail.template">
+            <field name="name">Booking Confirmation (Professional)</field>
+            <field name="model_id" ref="model_hotel_booking"/>
+            <field name="email_from">${object.company_id.email or 'reservations@${object.company_id.website or "yourhotel.com"}'}</field>
+            <field name="email_to">${object.guest_id.email}</field>
+            <field name="subject">Booking Confirmation object.name - ${object.company_id.name}</field>
+            <field name="body_html"><![CDATA[
+                <div style="font-family:'Helvetica Neue', Helvetica, Arial, sans-serif; max-width:650px; margin:0 auto; border:1px solid #e1e1e1;">
+                    <!-- Header -->
+                    <div style="background:#2c3e50; padding:20px; text-align:center;">
+                        <img src="/web/image/res.company/${object.company_id.id}/logo/300x300" alt="Hotel Logo" style="max-height:80px;"/>
+                        <h1 style="color:#fff; margin:15px 0 0; font-size:24px;">BOOKING CONFIRMATION</h1>
+                    </div>
+
+                    <!-- Body -->
+                    <div style="padding:30px;">
+                        <p style="font-size:16px; margin-bottom:25px;">Dear ${object.guest_id.name},</p>
+
+                        <p style="font-size:15px; line-height:1.6;">Thank you for choosing ${object.company_id.name}. Your reservation has been confirmed with the following details:</p>
+
+                        <table style="width:100%; border-collapse:collapse; margin:25px 0 30px;">
+                            <tr style="background:#f8f9fa;">
+                                <th colspan="2" style="padding:12px 15px; text-align:left; font-size:16px; border:1px solid #ddd;">Reservation Summary</th>
+                            </tr>
+                            <tr>
+                                <td style="padding:12px 15px; border:1px solid #ddd; font-weight:bold; width:40%;">Confirmation Number</td>
+                                <td style="padding:12px 15px; border:1px solid #ddd;">${object.name}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:12px 15px; border:1px solid #ddd; font-weight:bold;">Room Type</td>
+                                <td style="padding:12px 15px; border:1px solid #ddd;">${object.room_id.room_type_id.name}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:12px 15px; border:1px solid #ddd; font-weight:bold;">Room Number</td>
+                                <td style="padding:12px 15px; border:1px solid #ddd;">${object.room_id.name}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:12px 15px; border:1px solid #ddd; font-weight:bold;">Check-In</td>
+                                <td style="padding:12px 15px; border:1px solid #ddd;">${format_datetime(object.check_in_date, dt_format='dd MMMM yyyy, HH:mm')}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:12px 15px; border:1px solid #ddd; font-weight:bold;">Check-Out</td>
+                                <td style="padding:12px 15px; border:1px solid #ddd;">${format_datetime(object.check_out_date, dt_format='dd MMMM yyyy, HH:mm')}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:12px 15px; border:1px solid #ddd; font-weight:bold;">Duration</td>
+                                <td style="padding:12px 15px; border:1px solid #ddd;">${(object.check_out_date - object.check_in_date).days} Nights</td>
+                            </tr>
+                        </table>
+
+                        <div style="background:#f9f9f9; padding:20px; border-left:4px solid #2c3e50; margin-bottom:25px;">
+                            <h3 style="margin-top:0; color:#2c3e50;">Important Information</h3>
+                            <ul style="padding-left:20px; margin-bottom:0;">
+                                <li>Check-in time: 3:00 PM</li>
+                                <li>Check-out time: 12:00 PM</li>
+                                <li>Cancellation policy: Free cancellation up to 48 hours before arrival</li>
+                            </ul>
+                        </div>
+
+                        <p style="font-size:15px; line-height:1.6;">If you need to modify or cancel your reservation, please contact our reservations team at <a href="tel:${object.company_id.phone or ''}" style="color:#2c3e50; text-decoration:none;">${object.company_id.phone or '[Hotel Phone]'}</a> or reply to this email.</p>
+
+                        <p style="font-size:15px; line-height:1.6;">We look forward to welcoming you to ${object.company_id.name}!</p>
+
+                        <p style="font-size:15px; margin-top:30px;">Best regards,<br/>
+                        <strong>The ${object.company_id.name} Team</strong></p>
+                    </div>
+
+                    <!-- Footer -->
+                    <div style="background:#f8f9fa; padding:20px; text-align:center; font-size:13px; color:#666; border-top:1px solid #e1e1e1;">
+                        <p style="margin:5px 0;">${object.company_id.name}</p>
+                        <p style="margin:5px 0;">${object.company_id.street or ''} ${object.company_id.street2 or ''}, ${object.company_id.city or ''}, ${object.company_id.country_id.name or ''}</p>
+                        <p style="margin:5px 0;">Phone: ${object.company_id.phone or ''} | Email: ${object.company_id.email or ''}</p>
+                        <p style="margin:10px 0 0;">
+                            <a href="${object.company_id.website or '#'}" style="color:#2c3e50; text-decoration:none; margin:0 10px;">Website</a>
+                            <a href="#" style="color:#2c3e50; text-decoration:none; margin:0 10px;">Directions</a>
+                            <a href="#" style="color:#2c3e50; text-decoration:none; margin:0 10px;">Contact Us</a>
+                        </p>
+                    </div>
+                </div>
+            ]]></field>
+        </record>
+
+        <!-- Check-out Reminder Template -->
+        <record id="email_template_check_out_reminder" model="mail.template">
+            <field name="name">Check-out Reminder (Professional)</field>
+            <field name="model_id" ref="model_hotel_guest"/>
+            <field name="email_from">${object.company_id.email or 'guestservices@${object.company_id.website or "yourhotel.com"}'}</field>
+            <field name="email_to">${object.email}</field>
+            <field name="subject">Reminder: Your Check-out is Tomorrow at ${object.company_id.name}</field>
+            <field name="body_html"><![CDATA[
+                <div style="font-family:'Helvetica Neue', Helvetica, Arial, sans-serif; max-width:650px; margin:0 auto; border:1px solid #e1e1e1;">
+                    <!-- Header -->
+                    <div style="background:#2c3e50; padding:20px; text-align:center;">
+                        <img src="/web/image/res.company/${object.company_id.id}/logo/300x300" alt="Hotel Logo" style="max-height:80px;"/>
+                        <h1 style="color:#fff; margin:15px 0 0; font-size:24px;">CHECK-OUT REMINDER</h1>
+                    </div>
+
+                    <!-- Body -->
+                    <div style="padding:30px;">
+                        <p style="font-size:16px; margin-bottom:25px;">Dear ${object.name},</p>
+
+                        <p style="font-size:15px; line-height:1.6;">We hope you're enjoying your stay at ${object.company_id.name}. This is a friendly reminder that your check-out date is tomorrow, <strong>${format_datetime(object.check_out_date, dt_format='dd MMMM yyyy')}</strong>.</p>
+
+                        <div style="background:#f9f9f9; padding:20px; border-left:4px solid #2c3e50; margin:25px 0;">
+                            <h3 style="margin-top:0; color:#2c3e50;">Check-out Information</h3>
+                            <ul style="padding-left:20px; margin-bottom:0;">
+                                <li>Check-out time: 12:00 PM (noon)</li>
+                                <li>Late check-out may be available upon request (subject to availability)</li>
+                                <li>Please return your room key to the front desk</li>
+                                <li>Final invoice will be emailed to you</li>
+                            </ul>
+                        </div>
+
+                        <p style="font-size:15px; line-height:1.6;">If you wish to extend your stay, please contact our front desk at <a href="tel:${object.company_id.phone or ''}" style="color:#2c3e50; text-decoration:none;">${object.company_id.phone or '[Hotel Phone]'}</a> at your earliest convenience.</p>
+
+                        <p style="font-size:15px; line-height:1.6;">For your convenience, we offer express check-out service. If you'd like to receive your final bill by email and skip the front desk, please reply to this message with "Express Check-out" in the subject line by 10:00 AM tomorrow.</p>
+
+                        <p style="font-size:15px; margin-top:30px;">Safe travels, and we hope to welcome you back soon!</p>
+
+                        <p style="font-size:15px; margin-top:30px;">Best regards,<br/>
+                        <strong>The ${object.company_id.name} Team</strong></p>
+                    </div>
+
+                    <!-- Footer -->
+                    <div style="background:#f8f9fa; padding:20px; text-align:center; font-size:13px; color:#666; border-top:1px solid #e1e1e1;">
+                        <p style="margin:5px 0;">${object.company_id.name}</p>
+                        <p style="margin:5px 0;">${object.company_id.street or ''} ${object.company_id.street2 or ''}, ${object.company_id.city or ''}, ${object.company_id.country_id.name or ''}</p>
+                        <p style="margin:5px 0;">Phone: ${object.company_id.phone or ''} | Email: ${object.company_id.email or ''}</p>
+                    </div>
+                </div>
+            ]]></field>
+        </record>
+
+    </data>
+</odoo>

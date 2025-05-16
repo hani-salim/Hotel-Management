@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--     عرض شجرة الحجوزات-->
+    <record id="view_booking_tree" model="ir.ui.view">
+        <field name="name">hotel.booking.tree</field>
+        <field name="model">hotel.booking</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="guest_id"/>
+                <field name="room_ids"/>
+                <field name="check_in_date"/>
+                <field name="check_out_date"/>
+                <field name="state" widget="statusbar"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- عرض نموذج الحجز -->
+    <record id="view_booking_form" model="ir.ui.view">
+        <field name="name">hotel.booking.form</field>
+        <field name="model">hotel.booking</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <header>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <group>
+                        <field name="guest_id"/>
+                        <field name="room_ids" widget="many2many_tags" domain="[('is_available', '=', True)]"/>
+                        <field name="check_in_date"/>
+                        <field name="check_out_date"/>
+                    </group>
+                    <footer>
+                        <button
+                                name="action_confirm"
+                                string="Confirm"
+                                type="object"
+                                class="btn-primary"
+                                attrs="{'invisible': [('state', '!=', 'draft')]}"
+                        />
+                        <button
+                                name="action_cancel"
+                                string="Cancel"
+                                type="object"
+                                class="oe_link"
+                                attrs="{'invisible': [('state', '!=', 'draft')]}"
+                                style="margin-left: 5px;"
+                        />
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- عرض البحث في الحجوزات -->
+    <record id="view_booking_search" model="ir.ui.view">
+        <field name="name">hotel.booking.search</field>
+        <field name="model">hotel.booking</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="guest_id"/>
+                <field name="room_ids"/>
+                <field name="state"/>
+                <!--                    <filter string="Today's Check-ins" domain="[('check_in_date', '=', context_today())]"/>-->
+                <!--                    <filter string="Today's Check-outs" domain="[('check_out_date', '=', context_today())]"/>-->
+            </search>
+        </field>
+    </record>
+</odoo>
