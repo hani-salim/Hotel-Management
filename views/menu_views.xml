@@ -14,6 +14,18 @@
         </record>
         <menuitem id="menu_hotel_rooms_list" name="Room List" parent="menu_hotel_rooms" action="action_room_kanban"/>
 
+         <record id="action_check_availability" model="ir.actions.act_window">
+            <field name="name">Check Room Availability</field>
+            <field name="res_model">hotel.room.availability.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        <menuitem id="menu_hotel_check_availability"
+                 name="Check Availability"
+                 parent="menu_hotel_rooms"
+                 action="action_check_availability"
+                 sequence="25"/>
+
         <!-- قائمة الضيوف -->
         <menuitem id="menu_hotel_guests" name="Guests" parent="menu_hotel_main" sequence="30"/>
         <record id="action_hotel_guests" model="ir.actions.act_window">
@@ -74,6 +86,26 @@
 
         <menuitem id="menu_hotel_products" name="Products" parent="menu_hotel_main" sequence="100"/>
         <menuitem id="menu_sales_Product" name="Product List" parent="menu_hotel_products" action="action_product"/>
+
+        <!-- نقاط الولاء-->
+         <record id="action_loyalty" model="ir.actions.act_window">
+            <field name="name">Loyalty Points</field>
+            <field name="res_model">loyalty.reward</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+        </record>
+        <menuitem id="menu_hotel_loyalty" name="Loyalty" parent="menu_hotel_main" sequence="110"/>
+        <menuitem id="menu_hotel_loyalty_reward" name="Loyalty Reward" parent="menu_hotel_loyalty"
+                  action="action_loyalty"/>
+
+<!--        &lt;!&ndash;عجلة الفرصة &ndash;&gt;-->
+<!--        <record id="action_wheel" model="ir.actions.client">-->
+<!--            <field name="name">Wheel.Of.Fortune</field>-->
+<!--            <field name="tag">hotel.wheel_of_fortune</field>-->
+<!--        </record>-->
+
+<!--        <menuitem id="menu_hotel_wheel" name="Wheel Of Fortune" parent="menu_hotel_main" action="action_wheel" sequence="110"/>-->
+
 
     </data>
 </odoo>

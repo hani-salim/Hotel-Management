@@ -5,48 +5,57 @@
         <field name="name">hotel.booking.tree</field>
         <field name="model">hotel.booking</field>
         <field name="arch" type="xml">
-            <tree>
+            <tree create="false" editable="bottom">
                 <field name="guest_id"/>
                 <field name="room_ids"/>
                 <field name="check_in_date"/>
                 <field name="check_out_date"/>
-                <field name="state" widget="statusbar"/>
+                <field name="duration" readonly="1"/>
+                <field name="room_ids" widget="many2many_tags"/>
+                <field name="state" widget="label"/>
+                     <button name="action_confirm" string="Confirm" type="object"
+                        class="btn-checkin-custom" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                <button name="action_cancel" string="Cancel" type="object"
+                        class="btn-checkout-custom" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
             </tree>
         </field>
     </record>
 
-    <!-- عرض نموذج الحجز -->
     <record id="view_booking_form" model="ir.ui.view">
         <field name="name">hotel.booking.form</field>
         <field name="model">hotel.booking</field>
         <field name="arch" type="xml">
-            <form>
+            <form target="new">
                 <sheet>
                     <header>
                         <field name="state" widget="statusbar"/>
                     </header>
-                    <group>
-                        <field name="guest_id"/>
-                        <field name="room_ids" widget="many2many_tags" domain="[('is_available', '=', True)]"/>
-                        <field name="check_in_date"/>
-                        <field name="check_out_date"/>
-                    </group>
+
+                    <div class="row">
+                        <div class="col-md-9">
+                            <group>
+                                <field name="guest_id"/>
+                                <field name="state" required="1"/>
+                                <field name="room_ids" widget="many2many_tags" domain="[('is_available', '=', True)]"/>
+                                <field name="check_in_date"/>
+                                <field name="check_out_date"/>
+                                <field name="duration" readonly="1"/>
+                            </group>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="oe_chatter" attrs="{'invisible': [('state', '!=', 'confirmed')]}">
+                                <field name="message_ids" widget="mail_thread"/>
+                            </div>
+                        </div>
+                    </div>
+
                     <footer>
-                        <button
-                                name="action_confirm"
-                                string="Confirm"
-                                type="object"
-                                class="btn-primary"
-                                attrs="{'invisible': [('state', '!=', 'draft')]}"
-                        />
-                        <button
-                                name="action_cancel"
-                                string="Cancel"
-                                type="object"
-                                class="oe_link"
-                                attrs="{'invisible': [('state', '!=', 'draft')]}"
-                                style="margin-left: 5px;"
-                        />
+                        <button name="action_confirm" string="Confirm" type="object"
+                                class="btn-primary" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                        <button name="action_cancel" string="Cancel" type="object"
+                                class="oe_link" attrs="{'invisible': [('state', '!=', 'draft')]}"
+                                style="margin-left: 5px;"/>
                     </footer>
                 </sheet>
             </form>
@@ -67,4 +76,5 @@
             </search>
         </field>
     </record>
+
 </odoo>

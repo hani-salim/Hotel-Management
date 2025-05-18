@@ -32,6 +32,30 @@ class HotelGuest(models.Model):
     check_in_date = fields.Datetime(string='Check-in Date', default=fields.Datetime.now, required=True)
     check_out_date = fields.Datetime(string='Check-out Date')
     service_request_ids = fields.One2many('hotel.service.request','guest_id')
+    loyalty_tier = fields.Selection(
+        [('silver', 'Silver'), ('gold', 'Gold'), ('platinum', 'Platinum')],
+        compute='_compute_loyalty_tier'
+    )
+    loyalty_points = fields.Integer(default=0, tracking=True)
+    reward_ids = fields.Many2many('loyalty.reward', string="Eligible Rewards")
+    transaction_ids = fields.One2many('loyalty.transaction', 'guest_id')
+
+    def _update_eligible_rewards(self):
+        for partner in self:
+            partner.reward_ids = self.env['loyalty.reward'].search([
+                ('points_cost', '<=', partner.loyalty_points),
+                ('active', '=', True)
+            ])
+
+    @api.depends('loyalty_points')
+    def _compute_loyalty_tier(self):
+        for partner in self:
+            if partner.loyalty_points >= 5000:
+                partner.loyalty_tier = 'platinum'
+            elif partner.loyalty_points >= 2000:
+                partner.loyalty_tier = 'gold'
+            else:
+                partner.loyalty_tier = 'silver'
 
     @api.depends('check_in_date', 'check_out_date')
     def _compute_duration(self):
@@ -92,8 +116,6 @@ class HotelGuest(models.Model):
         }
 
     def action_submit_booking(self):
-        if not self.room_ids:
-            raise UserError(_("Please select a room!"))
         if not self.check_out_date or self.check_out_date < fields.Datetime.now():
             raise UserError(_("Please select a valid check-out date!"))
 
@@ -106,22 +128,23 @@ class HotelGuest(models.Model):
             if self.env['hotel.booking'].search([
                 ('room_ids', 'in', room.id),
                 ('state', '!=', 'done'),
-                ('id', '!=', self.id)
+
             ]):
                 pass
             else:
                 rooms.append(room.id)
 
-        print(rooms)
+        if rooms:
+            # Create booking
+            booking = self.sudo().env['hotel.booking'].create({
+                'guest_id': self.id,
+                'room_ids': [(6, 0, rooms)],
+                'check_in_date': fields.Datetime.now(),
+                'check_out_date': self.check_out_date
+            })
+        else:
+            raise UserError(_("Please select a room!"))
 
-
-        # Create booking
-        booking = self.sudo().env['hotel.booking'].create({
-            'guest_id': self.id,
-            'room_ids': [(6, 0, rooms)],
-            'check_in_date': fields.Datetime.now(),
-            'check_out_date': self.check_out_date
-        })
 
         self.room_ids.action_set_booking()
 
@@ -138,6 +161,20 @@ class HotelGuest(models.Model):
             guest.invoice_count = self.env['account.move'].search_count([
                 ('guest_id', '=', guest.id)
             ])
+
+    def action_redeem(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Redeem Reward',
+            'res_model': 'loyalty.redeem.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'default_guest_id': self.id,
+            }
+        }
+
+
 
     def get_review_url(self):
         self.ensure_one()

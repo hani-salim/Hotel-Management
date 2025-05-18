@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <record id="view_room_kanban" model="ir.ui.view">
-            <field name="name">hotel.room.kanban</field>
-            <field name="model">hotel.room</field>
-            <field name="arch" type="xml">
-                <kanban default_group_by="floor" class="room_kanban">
-                    <field name="floor"/>
-                    <field name="state"/>
-                    <field name="name"/>
-                    <field name="view_type"/>
-                    <templates>
+       <record id="view_room_kanban" model="ir.ui.view">
+    <field name="name">hotel.room.kanban</field>
+    <field name="model">hotel.room</field>
+    <field name="arch" type="xml">
+        <kanban default_group_by="floor" class="room_kanban" js_class="room_kanban">
+            <field name="floor"/>
+            <field name="state"/>
+            <field name="name"/>
+            <field name="view_type"/>
+            <templates>
                         <t t-name="kanban-box">
                             <div class="oe_kanban_global_click room_card" t-att-style="'background-color: ' + {
                                 'ready': '#28a745',
@@ -48,7 +48,6 @@
                         <header>
                             <field name="state" widget="statusbar"/>
                             <div>
-
                                 <button
                                         name="action_open_check_in_form"
                                         type="object"
@@ -89,8 +88,6 @@
                 </form>
             </field>
         </record>
-
-
 
         <!-- البحث search -->
         <record id="view_hotel_room_search" model="ir.ui.view">

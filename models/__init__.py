@@ -8,3 +8,6 @@ from . import service_request
 from . import service
 from . import product_room
 from . import sale_order
+from . import loyalty_rewards
+from . import loyalty_transaction
+from . import hotel_sale_order

@@ -8,6 +8,7 @@ _logger = logging.getLogger(__name__)
 
 class HotelBooking(models.Model):
     _name = 'hotel.booking'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = 'Booking Request'
 
     guest_id = fields.Many2one('hotel.guest', string='Guest', required=True)
@@ -17,12 +18,13 @@ class HotelBooking(models.Model):
     check_out_date = fields.Datetime(string='Check-out Date', required=True)
     state = fields.Selection([
         ('draft', 'Draft'),
-        ('confirmed', 'Confirmed'),
+        ('confirm', 'Confirm'),
         ('done', 'Done'),
-        ('cancelled', 'Cancelled')
+        ('cancel', 'Cancel')
     ], string='Status', default='draft', tracking=True)
     invoice_id = fields.Many2one('account.move', string='Invoice')
     payment_state = fields.Selection(related='invoice_id.payment_state', string='Payment Status')
+    duration = fields.Integer(string='Duration (Days)', compute='_compute_duration', store=True)
     company_id = fields.Many2one(
         'res.company',
         string='Company',
@@ -30,6 +32,39 @@ class HotelBooking(models.Model):
         required=True,
         readonly=True
     )
+
+    @api.depends('check_in_date', 'check_out_date')
+    def _compute_duration(self):
+        for guest in self:
+            if guest.check_in_date and guest.check_out_date:
+                delta = guest.check_out_date - guest.check_in_date
+                guest.duration = delta.days
+            else:
+                guest.duration = 0
+
+    @api.model
+    def _get_available_rooms(self, check_in, check_out):
+
+        # الغرف التي ليس لها حجوزات متضاربة
+        conflicting_bookings = self.search([
+            ('state', 'not in', ['cancel', 'done']),
+            '|',
+            '&',
+            ('check_in_date', '<', check_out),
+            ('check_out_date', '>', check_in),
+            '&',
+            ('check_in_date', '>=', check_in),
+            ('check_out_date', '<=', check_out)
+        ])
+
+        conflicting_room_ids = conflicting_bookings.mapped('room_ids').ids
+
+        available_rooms = self.env['hotel.room'].search([
+            ('is_available', '=', True),
+            ('id', 'not in', conflicting_room_ids)
+        ])
+
+        return available_rooms
 
     def action_confirm(self):
         for booking in self:
@@ -107,7 +142,7 @@ class HotelBooking(models.Model):
                         invoice.write({
                             'invoice_line_ids': invoice_line_vals_list,
                         })
-                        print('just writing....')
+
 
                 # تحديث حالة الغرف
                 booking.room_ids.write({
@@ -115,7 +150,12 @@ class HotelBooking(models.Model):
                     'state': 'booking'
                 })
 
-                booking.state = 'confirmed'
+                booking.state = 'confirm'
+
+                points = self.duration * 10
+                self.guest_id.sudo().write({
+                    'loyalty_points': self.guest_id.loyalty_points + points
+                })
 
                 return {
                     'name': _('Invoice'),
@@ -141,7 +181,7 @@ class HotelBooking(models.Model):
                     'state': 'ready'
                 })
 
-            booking.state = 'cancelled'
+            booking.state = 'cancel'
 
     @api.constrains('check_in_date', 'check_out_date')
     def _check_dates(self):
@@ -159,3 +199,5 @@ class HotelBooking(models.Model):
             ('create_date', '<', fields.Datetime.now() - timedelta(days=30))
         ])
         cancelled_bookings.unlink()
+
+

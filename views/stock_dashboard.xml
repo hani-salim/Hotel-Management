@@ -12,14 +12,15 @@
 
                 <templates>
                     <t t-name="kanban-box">
-                        <div class="oe_kanban_global_click stock-card" t-att-class="record.quantity.raw_value &lt; 10 ? 'low-quantity-card' : ''">
+                        <div class="oe_kanban_global_click stock-card"
+                             t-att-class="record.quantity.raw_value &lt; 10 ? 'low-quantity-card' : ''">
                             <div class="o_kanban_record_body">
                                 <!-- Header: Product Name & Category -->
                                 <div class="o_kanban_record_top mb-2">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <strong class="o_kanban_record_title">
                                             <div class="product-name font-weight-bold">
-                                                <field name="product_id" widget="hr_employee"/> <!-- يعرض اسم المنتج مباشرة -->
+                                                <field name="product_id" widget="hr_employee"/>
                                             </div>
                                         </strong>
                                         <span t-if="record.product_categ_id.raw_value" class="category-badge">
@@ -34,7 +35,7 @@
                                         <!-- Quantity -->
                                         <div class="col-6">
                                             <div class="text-center stock-info">
-                                                <div class="text-muted small">الكمية المتاحة</div>
+                                                <div class="text-muted small">Available Quantity</div>
                                                 <h2 t-att-class="record.quantity.raw_value &lt; 10 ? 'text-danger' : 'text-success'">
                                                     <field name="quantity"/>
                                                 </h2>
@@ -51,14 +52,14 @@
                                         <!-- Location -->
                                         <div class="col-6">
                                             <div class="text-center stock-info">
-                                                <div class="text-muted small">الموقع</div>
+                                                <div class="text-muted small">Location</div>
                                                 <div class="location-value">
                                                     <field name="location_id"/>
                                                 </div>
                                                 <div class="product-name-location text-primary mt-2">
-                                                    <field name="product_id" widget="hr_employee"/> <!-- اسم المنتج في الـ Location -->
+                                                    <field name="product_id" widget="hr_employee"/>
                                                 </div>
-                                                <i class="fa fa-map-marker location-icon mt-1"></i>
+                                                <i class="fa fa-map-marker location-icon mt-1" title="Location"/>
                                             </div>
                                         </div>
                                     </div>
@@ -73,12 +74,13 @@
 
     <!-- باقي الإعدادات -->
     <record id="action_hotel_stock_dashboard" model="ir.actions.act_window">
-        <field name="name">لوحة مخزن الفندق</field>
+        <field name="name">Dashboard Hotel Inventory</field>
         <field name="res_model">stock.quant</field>
         <field name="view_mode">kanban,tree,form</field>
         <field name="view_id" ref="view_hotel_stock_kanban"/>
         <field name="context">{'search_default_locationgroup': 1}</field>
     </record>
     <menuitem id="menu_hotel_stock" name="Hotel Stock" parent="stock.menu_stock_root"/>
-    <menuitem id="menu_hotel_stock_dashboard" name="Dashboard" parent="menu_hotel_stock" action="action_hotel_stock_dashboard"/>
+    <menuitem id="menu_hotel_stock_dashboard" name="Dashboard" parent="menu_hotel_stock"
+              action="action_hotel_stock_dashboard"/>
 </odoo>

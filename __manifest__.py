@@ -13,7 +13,7 @@
     """,
     'author': 'Hani salim',
     'website': '',
-    'depends': ['base', 'mail','sale', 'product', 'account','stock','purchase'],
+    'depends': ['base', 'mail', 'sale', 'product', 'account', 'stock', 'purchase', 'web', 'website'],
     'data': [
         'security/ir.model.access.csv',
         'security/security.xml',
@@ -28,12 +28,14 @@
         'views/invoice_views.xml',
         'views/service_views.xml',
         'views/stock_dashboard.xml',
-        'wizard/wizard_view.xml',
         'views/payment_views.xml',
         'views/menu_views.xml',
+        'views/register_page_view.xml',
+        'views/loyalty_rewards_views.xml',
         'report/occupancy_report.xml',
         'report/report_actions.xml',
     ],
+
     'demo': [
         'demo/demo_data.xml'
     ],
@@ -45,7 +47,11 @@
             'hotel/static/src/css/*.css',
             'hotel/static/src/xml/*.xml',
             'hotel/static/src/js/*.js',
-
+            'hotel/static/src/html/*.html',
+        ],
+        'web.assets_frontend': [
+            'hotel/static/src/css/*.css',
+            'hotel/static/src/js/*.js',
         ],
     },
 }

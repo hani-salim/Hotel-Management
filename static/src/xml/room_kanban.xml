@@ -1,4 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
-
+    <t t-name="CustomRoomKanbanButtons">
+        <div class="custom_buttons_fallback" style="padding:15px; background:#f8f9fa; margin-bottom:20px;">
+            <button class="btn btn-primary" id="ultimate_check_availability">
+                <i class="fa fa-calendar-check"/> Ultimate Check Availability
+            </button>
+            <button class="btn btn-secondary" id="ultimate_show_dashboard">
+                <i class="fa fa-tachometer-alt"/> Ultimate Dashboard
+            </button>
+        </div>
+    </t>
 </templates>

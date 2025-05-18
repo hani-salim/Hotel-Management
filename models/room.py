@@ -2,7 +2,7 @@ from datetime import timedelta
 from email.policy import default
 from warnings import catch_warnings
 
-from odoo import models, fields, api
+from odoo import models, fields, api,_
 from odoo.exceptions import UserError
 
 
@@ -11,7 +11,8 @@ class HotelRoom(models.Model):
     _description = 'Hotel Room'
 
     name = fields.Char(string='Room Number', required=True)
-    floor = fields.Integer(string='Floor',required=1)
+    description = fields.Text(string='Description')
+    floor = fields.Integer(string='Floor', required=1)
     view_type = fields.Selection([
         ('sea', 'Sea View'),
         ('city', 'City View'),
@@ -23,10 +24,10 @@ class HotelRoom(models.Model):
         ('needs_maintenance', 'Needs Maintenance'),
         ('out_of_service', 'Out of service'),
         ('booking', 'Booking'),
-    ], string='Status', default='ready',required=1)
+    ], string='Status', default='ready', required=1)
     current_guest_id = fields.Many2one('hotel.guest', string='Current Guest')
     booking_count = fields.Integer(string='Booking Count', compute='_compute_booking_count')
-    booking_ids = fields.Many2many('hotel.booking','room_ids')
+    booking_ids = fields.Many2many('hotel.booking', 'room_ids')
     is_available = fields.Boolean(string='Is Available', compute='_compute_availability', store=1, default=1)
     last_cleaning_date = fields.Datetime(string='Last Cleaning Date')
     last_maintenance_date = fields.Datetime(string='Last Maintenance Date')
@@ -61,7 +62,6 @@ class HotelRoom(models.Model):
                 room.is_available = True
             else:
                 room.is_available = False
-
 
     def action_set_cleaning(self):
         self.write({'state': 'needs_cleaning'})
@@ -102,14 +102,29 @@ class HotelRoom(models.Model):
             'res_model': 'hotel.guest',
             'views': [(self.env.ref('hotel.view_guest_registration_form').id, 'form')],
             'target': 'new',
-            'context':{
-                'default_room_ids':[ self.id],
+            'context': {
+                'default_room_ids': [self.id],
             }
         }
 
     def action_open_check_out_form(self):
         if not self.current_guest_id:
             raise UserError("لا يوجد ضيف حالياً في هذه الغرفة")
+
+        booking_id = self.env['hotel.booking'].sudo().search([
+            ('guest_id', '=', self.current_guest_id.id),
+            ('state', '=', 'draft'),
+        ], limit=1)
+
+        if booking_id:
+            return {
+                'type': 'ir.actions.act_window',
+                'res_model': 'hotel.booking',
+                'res_id': booking_id.id,
+                'view_mode': 'tree',
+                'target': 'new',
+                'context': {}
+            }
 
         # البحث عن الفاتورة المرتبطة بالضيف والغرفة
         invoice = self.env['account.move'].search([
@@ -121,11 +136,11 @@ class HotelRoom(models.Model):
             if invoice.payment_state == 'paid':
                 current_date = fields.Datetime.now()
                 print(current_date)
-                booking =self.env['hotel.booking'].search([
-                    ('room_ids','in',self.id),
-                    ('guest_id','=',self.current_guest_id.id),
-                    ('state','!=','done'),
-                ])
+                booking = self.env['hotel.booking'].search([
+                    ('room_ids', 'in', self.id),
+                    ('guest_id', '=', self.current_guest_id.id),
+                    ('state', '!=', 'done'),
+                ], limit=1)
                 check_out_date = booking.check_out_date if booking else self.current_guest_id.check_out_date
                 print(check_out_date)
 
@@ -181,7 +196,6 @@ class HotelRoom(models.Model):
                     }
                 }
         else:
-
             booking = self.env['hotel.booking'].search([
                 ('guest_id', '=', self.current_guest_id.id),
                 ('room_ids', 'in', self.id),
@@ -189,6 +203,28 @@ class HotelRoom(models.Model):
             ], limit=1)
 
             if booking:
-                booking.action_confirm()
+                return {
+                    'type': 'ir.actions.act_window',
+                    'res_model': 'hotel.booking',
+                    'res_id': invoice.id,
+                    'views': [(False, 'form')],
+                    'target': 'new',
+                    'context': {
+                        'form_view_initial_mode': 'edit',
+                        'default_guest_id': self.current_guest_id.id,
+                        'default_room_ids': self.id
+                    }
+                }
             else:
                 raise UserError("لا يوجد فاتورة أو حجز نشط لهذا الضيف في هذه الغرفة")
+
+    def action_check_availability(self):
+        return {
+            'name': _('Check Room Availability'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'hotel.room.availability.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {'default_room_ids': self.ids},
+        }
+

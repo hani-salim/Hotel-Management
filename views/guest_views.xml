@@ -24,6 +24,19 @@
         <field name="arch" type="xml">
             <form>
                 <sheet>
+                    <header>
+                        <div>
+                            <button
+                                name="action_redeem"
+                                string="Redeem Reward"
+                                type="object"
+                                class="btn-checkin-custom"
+                                icon="fa-sign-in-alt"
+                                attrs="{'invisible': [('loyalty_points', '&lt;', 100)]}"
+                        />
+                        </div>
+
+                    </header>
                     <group>
                         <group>
                             <field name="partner_id"/>
@@ -38,10 +51,19 @@
                         </group>
                     </group>
                     <notebook>
-                        <!--                        <page string="Personal Info">-->
-                        <!--                            <field name="address" widget="textarea"/>-->
-                        <!--                            <field name="membership_type"/>-->
-                        <!--                        </page>-->
+                        <page string="Loyalty Program">
+                            <group>
+                                <field name="loyalty_points" readonly="0"/>
+                                <field name="reward_ids" widget="many2many_tags" readonly="1"/>
+                            </group>
+                            <field name="transaction_ids">
+                                <tree>
+                                    <field name="date"/>
+                                    <field name="points"/>
+                                    <field name="reward_id"/>
+                                </tree>
+                            </field>
+                        </page>
                         <page string="Reviews">
                             <field name="review_ids" mode="tree">
                                 <tree>

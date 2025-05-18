@@ -2,58 +2,67 @@
 <odoo>
     <data noupdate="1">
 
-<!--        &lt;!&ndash; فئات المنتجات للمخزون &ndash;&gt;-->
-<!--        <record id="product_category_room_supplies" model="product.category">-->
-<!--            <field name="name">مستلزمات الغرف</field>-->
-<!--            <field name="parent_id" ref="product.product_category_all"/>-->
-<!--        </record>-->
 
-<!--        <record id="product_category_restaurant" model="product.category">-->
-<!--            <field name="name">مواد المطعم</field>-->
-<!--            <field name="parent_id" ref="product.product_category_all"/>-->
-<!--        </record>-->
+        <!--        &lt;!&ndash; فئات المنتجات للمخزون &ndash;&gt;-->
+        <!--        <record id="product_category_room_supplies" model="product.category">-->
+        <!--            <field name="name">مستلزمات الغرف</field>-->
+        <!--            <field name="parent_id" ref="product.product_category_all"/>-->
+        <!--        </record>-->
 
-<!--        <record id="product_category_maintenance" model="product.category">-->
-<!--            <field name="name">معدات الصيانة</field>-->
-<!--            <field name="parent_id" ref="product.product_category_all"/>-->
-<!--        </record>-->
+        <!--        <record id="product_category_restaurant" model="product.category">-->
+        <!--            <field name="name">مواد المطعم</field>-->
+        <!--            <field name="parent_id" ref="product.product_category_all"/>-->
+        <!--        </record>-->
 
-<!--        &lt;!&ndash; مواقع المخزون &ndash;&gt;-->
-<!--        <record id="stock_warehouse_hotel" model="stock.warehouse">-->
-<!--            <field name="name">الفندق الرئيسي</field>-->
-<!--            <field name="code">HOTEL</field>-->
-<!--        </record>-->
+        <!--        <record id="product_category_maintenance" model="product.category">-->
+        <!--            <field name="name">معدات الصيانة</field>-->
+        <!--            <field name="parent_id" ref="product.product_category_all"/>-->
+        <!--        </record>-->
 
-<!--        <record id="stock_location_rooms" model="stock.location">-->
-<!--            <field name="name">مستلزمات الغرف</field>-->
-<!--            <field name="usage">internal</field>-->
-<!--            <field name="location_id" ref="stock.stock_location_locations"/>-->
-<!--        </record>-->
+        <!--        &lt;!&ndash; مواقع المخزون &ndash;&gt;-->
+        <!--        <record id="stock_warehouse_hotel" model="stock.warehouse">-->
+        <!--            <field name="name">الفندق الرئيسي</field>-->
+        <!--            <field name="code">HOTEL</field>-->
+        <!--        </record>-->
 
-<!--        <record id="stock_location_restaurant" model="stock.location">-->
-<!--            <field name="name">مواد المطعم</field>-->
-<!--            <field name="usage">internal</field>-->
-<!--            <field name="location_id" ref="stock.stock_location_locations"/>-->
-<!--        </record>-->
+        <!--        <record id="stock_location_rooms" model="stock.location">-->
+        <!--            <field name="name">مستلزمات الغرف</field>-->
+        <!--            <field name="usage">internal</field>-->
+        <!--            <field name="location_id" ref="stock.stock_location_locations"/>-->
+        <!--        </record>-->
 
-<!--        &lt;!&ndash; منتجات مخزنية &ndash;&gt;-->
-<!--        <record id="product_product_towel" model="product.product">-->
-<!--            <field name="name">منشفة فندقية</field>-->
-<!--            <field name="type">product</field> &lt;!&ndash; صنف مخزني &ndash;&gt;-->
-<!--            <field name="categ_id" ref="product_category_room_supplies"/>-->
-<!--            <field name="lst_price">50.0</field>-->
-<!--            <field name="standard_price">30.0</field> &lt;!&ndash; سعر التكلفة &ndash;&gt;-->
-<!--            <field name="sale_ok">true</field>-->
-<!--            <field name="tracking">lot</field> &lt;!&ndash; تتبع بالدفعات &ndash;&gt;-->
-<!--        </record>-->
+        <!--        <record id="stock_location_restaurant" model="stock.location">-->
+        <!--            <field name="name">مواد المطعم</field>-->
+        <!--            <field name="usage">internal</field>-->
+        <!--            <field name="location_id" ref="stock.stock_location_locations"/>-->
+        <!--        </record>-->
 
-<!--        &lt;!&ndash; كمية أولية للمنشفة في المخزن &ndash;&gt;-->
-<!--        <record id="stock_quant_towel" model="stock.quant">-->
-<!--            <field name="product_id" ref="product_product_towel"/>-->
-<!--            <field name="location_id" ref="stock_location_rooms"/>-->
-<!--            <field name="quantity">100.0</field>-->
-<!--        </record>-->
+        <!--        &lt;!&ndash; منتجات مخزنية &ndash;&gt;-->
+        <!--        <record id="product_product_towel" model="product.product">-->
+        <!--            <field name="name">منشفة فندقية</field>-->
+        <!--            <field name="type">product</field> &lt;!&ndash; صنف مخزني &ndash;&gt;-->
+        <!--            <field name="categ_id" ref="product_category_room_supplies"/>-->
+        <!--            <field name="lst_price">50.0</field>-->
+        <!--            <field name="standard_price">30.0</field> &lt;!&ndash; سعر التكلفة &ndash;&gt;-->
+        <!--            <field name="sale_ok">true</field>-->
+        <!--            <field name="tracking">lot</field> &lt;!&ndash; تتبع بالدفعات &ndash;&gt;-->
+        <!--        </record>-->
 
+        <!--        &lt;!&ndash; كمية أولية للمنشفة في المخزن &ndash;&gt;-->
+        <!--        <record id="stock_quant_towel" model="stock.quant">-->
+        <!--            <field name="product_id" ref="product_product_towel"/>-->
+        <!--            <field name="location_id" ref="stock_location_rooms"/>-->
+        <!--            <field name="quantity">100.0</field>-->
+        <!--        </record>-->
+
+        <record id="product_discount" model="product.product">
+            <field name="name">Loyalty Discount</field>
+            <field name="type">service</field>
+            <field name="list_price">0</field>
+            <field name="invoice_policy">order</field>
+            <field name="sale_ok">True</field>
+            <field name="purchase_ok">False</field>
+        </record>
 
         <!-- إنشاء فئة وحدات قياس جديدة خاصة بالفندق -->
         <record id="product_uom_categ_hotel" model="uom.category">
@@ -69,7 +78,7 @@
             <field name="rounding">0.01</field>
         </record>
 
-        <!-- إنشاء حساب الإيرادات لـ Odoo 16 -->
+        <!-- إنشاء حساب الإيرادات  -->
         <record id="account_hotel_income" model="account.account">
             <field name="name">إيرادات الغرف الفندقية</field>
             <field name="code">410001</field>
@@ -153,6 +162,135 @@
             <field name="taxes_id" eval="[(6, 0, [ref('tax_sale_rooms')])]"/>
             <field name="property_account_income_id" ref="account_hotel_income"/>
             <field name="description">Suite Room Accommodation</field>
+        </record>
+
+        <record id="room_101" model="hotel.room">
+            <field name="name">101</field>
+            <field name="floor">1</field>
+            <field name="view_type">sea</field>
+            <field name="state">ready</field>
+            <field name="product_id" ref="product_product_vip_room"/>
+            <field name="description">Single room with sea view</field>
+        </record>
+
+        <record id="room_102" model="hotel.room">
+            <field name="name">102</field>
+            <field name="floor">1</field>
+            <field name="view_type">city</field>
+            <field name="state">ready</field>
+            <field name="product_id" ref="product_product_chalet"/>
+            <field name="description">Single room with city view</field>
+        </record>
+
+        <record id="room_103" model="hotel.room">
+            <field name="name">103</field>
+            <field name="floor">1</field>
+            <field name="view_type">garden</field>
+            <field name="state">ready</field>
+            <field name="product_id" ref="product_product_chalet"/>
+            <field name="description">Single room with garden view</field>
+        </record>
+
+        <record id="room_104" model="hotel.room">
+            <field name="name">104</field>
+            <field name="floor">1</field>
+            <field name="view_type">sea</field>
+            <field name="state">needs_cleaning</field>
+            <field name="product_id" ref="product_product_chalet"/>
+            <field name="description">Single room with sea view (needs cleaning)</field>
+        </record>
+
+        <!-- الغرف المزدوجة (الطابق الثاني) -->
+        <record id="room_201" model="hotel.room">
+            <field name="name">201</field>
+            <field name="floor">2</field>
+            <field name="view_type">sea</field>
+            <field name="state">ready</field>
+            <field name="product_id" ref="product_product_vip_room"/>
+            <field name="description">Double room with sea view</field>
+        </record>
+
+        <record id="room_202" model="hotel.room">
+            <field name="name">202</field>
+            <field name="floor">2</field>
+            <field name="view_type">city</field>
+            <field name="state">ready</field>
+            <field name="product_id" ref="product_product_suite"/>
+            <field name="description">Double room with city view</field>
+        </record>
+
+        <record id="room_203" model="hotel.room">
+            <field name="name">203</field>
+            <field name="floor">2</field>
+            <field name="view_type">garden</field>
+            <field name="state">ready</field>
+            <field name="product_id" ref="product_product_suite"/>
+            <field name="description">Double room with garden view</field>
+        </record>
+
+        <record id="room_204" model="hotel.room">
+            <field name="name">204</field>
+            <field name="floor">2</field>
+            <field name="view_type">sea</field>
+            <field name="state">needs_maintenance</field>
+            <field name="product_id" ref="product_product_suite"/>
+            <field name="description">Double room with sea view (needs maintenance)</field>
+        </record>
+
+        <record id="room_205" model="hotel.room">
+            <field name="name">205</field>
+            <field name="floor">2</field>
+            <field name="view_type">city</field>
+            <field name="state">ready</field>
+            <field name="product_id" ref="product_product_suite"/>
+            <field name="description">Double room with city view (booked)</field>
+        </record>
+
+        <!-- الغرف المزدوجة (الطابق الثالث) -->
+        <record id="room_301" model="hotel.room">
+            <field name="name">301</field>
+            <field name="floor">3</field>
+            <field name="view_type">sea</field>
+            <field name="state">ready</field>
+            <field name="product_id" ref="product_product_vip_room"/>
+            <field name="description">Double room with sea view</field>
+        </record>
+
+        <record id="room_302" model="hotel.room">
+            <field name="name">302</field>
+            <field name="floor">3</field>
+            <field name="view_type">city</field>
+            <field name="state">ready</field>
+            <field name="product_id" ref="product_product_suite"/>
+            <field name="description">Double room with city view</field>
+        </record>
+
+        <record id="room_303" model="hotel.room">
+            <field name="name">303</field>
+            <field name="floor">3</field>
+            <field name="view_type">garden</field>
+            <field name="state">ready</field>
+            <field name="product_id" ref="product_product_suite"/>
+            <field name="description">Double room with garden view</field>
+        </record>
+
+        <record id="room_304" model="hotel.room">
+            <field name="name">304</field>
+            <field name="floor">3</field>
+            <field name="view_type">sea</field>
+            <field name="state">out_of_service</field>
+            <field name="product_id" ref="product_product_suite"/>
+            <field name="description">Double room with sea view (out of service)</field>
+        </record>
+
+        <!-- السويتات (الطابق الرابع) -->
+        <record id="room_401" model="hotel.room">
+            <field name="name">401</field>
+            <field name="floor">4</field>
+            <field name="view_type">sea</field>
+            <field name="state">ready</field>
+            <field name="product_id" ref="product_product_vip_room"/>
+            <field name="description">Luxury suite with sea view</field>
         </record>
     </data>
 </odoo>
