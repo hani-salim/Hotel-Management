@@ -43,9 +43,13 @@ class HotelBooking(models.Model):
                 guest.duration = 0
 
     @api.model
-    def _get_available_rooms(self, check_in, check_out):
+    def get_available_rooms(self, check_in, check_out):
 
-        # الغرف التي ليس لها حجوزات متضاربة
+        if isinstance(check_in, str):
+            check_in = fields.Date.from_string(check_in)
+        if isinstance(check_out, str):
+            check_out = fields.Date.from_string(check_out)
+
         conflicting_bookings = self.search([
             ('state', 'not in', ['cancel', 'done']),
             '|',
@@ -57,12 +61,14 @@ class HotelBooking(models.Model):
             ('check_out_date', '<=', check_out)
         ])
 
-        conflicting_room_ids = conflicting_bookings.mapped('room_ids').ids
+        booked_room_ids = conflicting_bookings.mapped('room_ids').ids
+        print(booked_room_ids)
 
         available_rooms = self.env['hotel.room'].search([
-            ('is_available', '=', True),
-            ('id', 'not in', conflicting_room_ids)
+            ('id', 'not in', booked_room_ids),
+            ('state', '!=', 'out_of_service'),
         ])
+
 
         return available_rooms
 
@@ -143,7 +149,6 @@ class HotelBooking(models.Model):
                             'invoice_line_ids': invoice_line_vals_list,
                         })
 
-
                 # تحديث حالة الغرف
                 booking.room_ids.write({
                     'current_guest_id': booking.guest_id.id,
@@ -199,5 +204,3 @@ class HotelBooking(models.Model):
             ('create_date', '<', fields.Datetime.now() - timedelta(days=30))
         ])
         cancelled_bookings.unlink()
-
-
