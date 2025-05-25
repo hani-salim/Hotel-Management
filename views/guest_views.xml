@@ -125,12 +125,10 @@
             <search>
                 <field name="partner_id" string="Guest Name"/>
                 <field name="room_ids" string="Room"/>
-                <!--                <filter string="Current Guests" domain="[('check_out_date','&gt;',context_today())]"/>-->
-                <!--                <filter string="VIP Guests" domain="[('membership_type','=','vip')]"/>-->
-                <!--                <group string="Group By">-->
-                <!--                    <filter string="Room" context="{'group_by':'room_id'}"/>-->
-                <!--                    <filter string="Membership Type" context="{'group_by':'membership_type'}"/>-->
-                <!--                </group>-->
+                <filter name="membership_type" string="VIP Guests" domain="[('membership_type','=','vip')]"/>
+                <group string="Group By">
+                    <filter name="membership_type" string="Membership Type" context="{'group_by':'membership_type'}"/>
+                </group>
             </search>
         </field>
     </record>

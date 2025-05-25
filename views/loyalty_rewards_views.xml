@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="view_reward_form" model="ir.ui.view">
+    <field name="name">loyalty.reward.form</field>
+    <field name="model">loyalty.reward</field>
+    <field name="arch" type="xml">
+        <form>
+            <sheet>
+                <group>
+                    <field name="name"/>
+                    <field name="active"/>
+                    <field name="points_cost"/>
+                    <field name="reward_type"/>
+                </group>
+
+                <notebook>
+                    <page string="Details" attrs="{'invisible': [('reward_type', '!=', 'discount')]}">
+                        <field name="discount_percent"/>
+                    </page>
+                </notebook>
+            </sheet>
+        </form>
+    </field>
+</record>
+    </data>
+</odoo>
+

@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- Guest Form Template -->
+    <template id="guest_form_template" name="Guest Registration Form">
+        <t t-call="website.layout">
+            <div class="hotel-container">
+                <div class="hotel-card">
+                    <div class="hotel-card-header">
+                        <h2 class="text-center mb-0">تسجيل ضيف جديد</h2>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" action="/api/hotel/guest_form/submit">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <div class="mb-3">
+                                <label>الاسم *</label>
+                                <input type="text" name="name" t-att-value="values.get('name', '')" required="true"
+                                       class="form-control"/>
+                            </div>
+                            <div class="mb-3">
+                                <label>البريد الإلكتروني</label>
+                                <input type="email" name="email" t-att-value="values.get('email', '')"
+                                       class="form-control"/>
+                            </div>
+                            <div class="mb-3">
+                                <label>الهاتف</label>
+                                <input type="text" name="phone" t-att-value="values.get('phone', '')"
+                                       class="form-control"/>
+                            </div>
+                            <div class="mb-3">
+                                <label>الشارع</label>
+                                <input type="text" name="street" t-att-value="values.get('street', '')"
+                                       class="form-control"/>
+                            </div>
+                            <div class="mb-3">
+                                <label>المدينة</label>
+                                <input type="text" name="city" t-att-value="values.get('city', '')"
+                                       class="form-control"/>
+                            </div>
+                            <div class="mb-3">
+                                <label>البلد</label>
+                                <select name="country_id" class="form-select">
+                                    <option t-if="not values.get('country_id')" selected="true"/>
+                                    <option t-att-selected="'country_id' == '113'" t-att-value="113">مصر</option>
+                                    <option t-att-selected="'country_id' == '75'" t-att-value="75">السعودية</option>
+                                    <option t-att-selected="'country_id' == '38'" t-att-value="38">الإمارات</option>
+                                </select>
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" name="is_company" t-att-checked="values.get('is_company')"
+                                       class="form-check-input" id="is_company"/>
+                                <label class="form-check-label" for="is_company">شركة</label>
+                            </div>
+                            <div class="mb-3">
+                                <label>اسم الشركة</label>
+                                <input type="text" name="company_name" t-att-value="values.get('company_name', '')"
+                                       class="form-control"/>
+                            </div>
+                            <button type="submit" class="btn btn-primary">التالي</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Booking Form Template -->
+   <template id="booking_form_template" name="Booking Form">
+        <t t-call="website.layout">
+            <div class="hotel-container">
+                <div class="hotel-card">
+                    <form method="post" action="/api/hotel/booking_form/submit" class="hotel-booking-form">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        <input type="hidden" name="partner_id" t-att-value="partner.id"/>
+                        <div class="hotel-card-header">
+                            <h2 class="text-center mb-0">إضافة حجز للضيف:
+                                <t t-esc="partner.name"/>
+                            </h2>
+                        </div>
+                        <div class="card-body hotel-room-selection-container">
+                            <div class="mb-4">
+                                <h5 class="hotel-form-label">اختر الغرف</h5>
+                                <div class="hotel-room-selection row">
+                                    <t t-foreach="rooms" t-as="room">
+                                        <div class="col-md-4 mb-3">
+                                            <label class="hotel-room-card d-block p-3 position-relative" t-att-data-room-id="room.id">
+                                                <input type="checkbox" name="selected_rooms" t-att-value="room.id"
+                                                       t-att-checked="values.get('room_ids') and str(room.id) in values.get('room_ids', [])"
+                                                       class="hotel-room-checkbox"/>
+                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <h5 class="mb-0">
+                                                        <t t-esc="room.name"/>
+                                                    </h5>
+                                                    <span class="badge bg-info">
+                                                        <t t-esc="room.view_type"/>
+                                                    </span>
+                                                </div>
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <span class="text-success fw-bold">
+                                                        <t t-esc="room.price_per_night"/>
+                                                    </span>
+                                                    <span class="badge bg-primary"><t t-esc="room.floor"/>F</span>
+                                                </div>
+                                                <div class="hotel-room-selected-badge">
+                                                    <i class="fa fa-check"/>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </t>
+                                </div>
+                                <div class="mt-3">
+                                    <p class="text-muted">إجمالي الغرف المختارة:
+                                        <span class="hotel-selected-count">0</span>
+                                    </p>
+                                    <input type="hidden" name="room_ids" t-att-value="values.get('room_ids', '')"/>
+                                </div>
+                            </div>
+                            <div class="card mb-4 shadow-sm">
+                                <div class="card-header bg-primary text-white">
+                                    <h5 class="mb-0">تفاصيل الحجز</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">تاريخ الوصول *</label>
+                                                <input type="date" name="check_in" required="true" class="form-control"
+                                                       t-att-value="values.get('check_in', '')"/>
+                                                <div class="invalid-feedback">يرجى تحديد تاريخ الوصول</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">تاريخ المغادرة *</label>
+                                                <input type="date" name="check_out" required="true" class="form-control"
+                                                       t-att-value="values.get('check_out', '')"/>
+                                                <div class="invalid-feedback">يرجى تحديد تاريخ المغادرة</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button type="submit" class="btn btn-success btn-lg">
+                                    <i class="fa fa-check me-2"/>
+                                    تأكيد الحجز
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <t t-set="additional_js" t-value="True"/>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const form = document.querySelector('.hotel-booking-form');
+                    const checkboxes = form.querySelectorAll('.hotel-room-checkbox');
+                    const selectedCount = form.querySelector('.hotel-selected-count');
+                    const hiddenInput = form.querySelector('input[name="room_ids"]');
+
+                    function updateSelectedRooms() {
+                        const selected = Array.from(checkboxes)
+                            .filter(checkbox => checkbox.checked)
+                            .map(checkbox => checkbox.value);
+
+                        hiddenInput.value = selected.join(',');
+                        selectedCount.textContent = selected.length;
+                    }
+
+                    checkboxes.forEach(checkbox => {
+                        checkbox.addEventListener('change', function() {
+                            const card = this.closest('.hotel-room-card');
+                            card.classList.toggle('selected', this.checked);
+                            updateSelectedRooms();
+                        });
+
+                        // Initialize selected rooms
+                        if (hiddenInput.value &amp;&amp; hiddenInput.value.includes(checkbox.value)) {
+                            checkbox.checked = true;
+                            checkbox.closest('.hotel-room-card').classList.add('selected');
+                        }
+                    });
+
+                    updateSelectedRooms();
+                });
+            </script>
+        </t>
+    </template>
+
+    <!-- Booking Success Template -->
+    <template id="booking_success_template" name="Booking Success">
+        <t t-call="website.layout">
+            <div class="hotel-container">
+                <div class="hotel-card text-center">
+                    <div class="hotel-card-header">
+                        <h2 class="mb-0">تم إنشاء الحجز بنجاح</h2>
+                    </div>
+                    <div class="card-body">
+                        <p>الضيف:
+                            <strong>
+                                <t t-esc="partner.name"/>
+                            </strong>
+                        </p>
+                        <p>رقم الحجز:
+                            <strong>#
+                                <t t-esc="booking.id"/>
+                            </strong>
+                        </p>
+                        <p>الغرف:
+                            <t t-foreach="booking.room_ids" t-as="room">
+                                <strong>
+                                    <t t-esc="room.name"/>
+                                </strong>
+                                <t t-if="not room_isfirst">,</t>
+                            </t>
+                        </p>
+                        <p>تاريخ الوصول:
+                            <strong>
+                                <t t-esc="booking.check_in_date"/>
+                            </strong>
+                        </p>
+                        <p>تاريخ المغادرة:
+                            <strong>
+                                <t t-esc="booking.check_out_date"/>
+                            </strong>
+                        </p>
+                        <a href="/api/hotel/guest_form" class="btn btn-primary mt-3">إضافة ضيف جديد وحجز آخر</a>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

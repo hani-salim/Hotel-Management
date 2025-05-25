@@ -41,7 +41,7 @@
             <search>
                 <field name="guest_id"/>
                 <field name="rating"/>
-<!--                <filter string="High Rating (4-5)" domain="[('rating', '>=', 4)]"/>-->
+                <filter name="rating" string="High Rating (4-5)" domain="[('rating', '>=', 4)]"/>
             </search>
         </field>
     </record>

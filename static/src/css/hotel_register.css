@@ -1,0 +1,146 @@
+/* تصميم حديث واحترافي لجميع الصفحات */
+.hotel-container {
+    max-width: 1140px;
+    margin: 3rem auto;
+    padding: 0 20px;
+    font-family: 'Cairo', sans-serif;
+    background-color: #f9fbfd;
+}
+
+.hotel-card {
+    border-radius: 16px;
+    border: none;
+    background: #fff;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    margin-bottom: 2.5rem;
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+}
+
+.hotel-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+.hotel-card-header {
+    background: linear-gradient(135deg, #1d3557, #457b9d);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 16px 16px 0 0;
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.hotel-form-label {
+    font-weight: 600;
+    color: #1d3557;
+    margin-bottom: 0.25rem;
+    display: block;
+}
+
+.hotel-form-control {
+    border-radius: 10px;
+    padding: 10px 14px;
+    border: 1px solid #ccd6dd;
+    background: #fff;
+    transition: 0.3s;
+    font-size: 1rem;
+}
+
+.hotel-form-control:focus {
+    border-color: #457b9d;
+    box-shadow: 0 0 0 0.25rem rgba(69, 123, 157, 0.25);
+}
+
+.hotel-btn-primary {
+    background: linear-gradient(135deg, #1d3557, #457b9d);
+    color: #fff;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: 0.3s ease-in-out;
+}
+
+.hotel-btn-primary:hover {
+    background: #1d3557;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+/* تصميم اختيار الغرف */
+.hotel-room-selection {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+    margin-top: 1rem;
+}
+
+.hotel-room-card {
+    flex: 1 1 280px;
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 1rem;
+    background: #ffffff;
+    position: relative;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+
+.hotel-room-card:hover {
+    border-color: #1d3557;
+    transform: scale(1.015);
+}
+
+.hotel-room-card.selected {
+    border: 2px solid #1d3557;
+    background-color: #edf6f9;
+}
+
+.hotel-room-checkbox {
+    position: absolute;
+    opacity: 0;
+}
+
+.hotel-room-selected-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background-color: #1d3557;
+    color: #fff;
+    font-size: 0.8rem;
+    padding: 4px 8px;
+    border-radius: 20px;
+    display: none;
+}
+
+.hotel-room-card.selected .hotel-room-selected-badge {
+    display: inline-block;
+}
+
+/* تنبيه المستخدم */
+.hotel-alert {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hotel-room-selection {
+        flex-direction: column;
+    }
+
+    .hotel-room-card {
+        flex: 1 1 100%;
+    }
+
+    .hotel-container {
+        padding: 0 10px;
+    }
+}

@@ -15,12 +15,21 @@
     'website': '',
     'depends': ['base', 'mail', 'sale', 'product', 'account', 'stock', 'purchase', 'web', 'website'],
     'data': [
-        'security/ir.model.access.csv',
         'security/security.xml',
+        'security/ir.model.access.csv',
+
         'data/product_data.xml',
         'data/email_template_data.xml',
         'data/cron_data.xml',
         'data/sequence_data.xml',
+
+        'report/occupancy_report.xml',
+        'report/report_actions.xml',
+
+        'wizard/occupancy_wizard.xml',
+        'wizard/redeem_view.xml',
+        'wizard/room_available_wizard.xml',
+
         'views/room_views.xml',
         'views/guest_views.xml',
         'views/booking_views.xml',
@@ -32,11 +41,7 @@
         'views/menu_views.xml',
         'views/register_page_view.xml',
         'views/loyalty_rewards_views.xml',
-        'wizard/occupancy_wizard.xml',
-        'wizard/redeem_view.xml',
-        'wizard/room_available_wizard.xml',
-        'report/occupancy_report.xml',
-        'report/report_actions.xml',
+
     ],
 
     'demo': [
@@ -44,7 +49,6 @@
     ],
     'installable': True,
     'application': True,
-    'auto_install': False,
     'assets': {
         'web.assets_backend': [
             'hotel/static/src/css/*.css',
@@ -54,7 +58,6 @@
         ],
         'web.assets_frontend': [
             'hotel/static/src/css/*.css',
-            'hotel/static/src/js/*.js',
         ],
     },
 }

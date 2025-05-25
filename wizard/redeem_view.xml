@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_loyalty_redeem_wizard" model="ir.ui.view">
+            <field name="name">loyalty.redeem.wizard.form</field>
+            <field name="model">loyalty.redeem.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="reward_id" domain="[('active','=',True)]"/>
+                        <field name="guest_id"/>
+                    </group>
+                    <footer>
+                        <button name="action_confirm" string="Confirm" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>
+

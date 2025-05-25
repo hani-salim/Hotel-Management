@@ -71,8 +71,8 @@
                 <field name="guest_id"/>
                 <field name="room_ids"/>
                 <field name="state"/>
-                <!--                    <filter string="Today's Check-ins" domain="[('check_in_date', '=', context_today())]"/>-->
-                <!--                    <filter string="Today's Check-outs" domain="[('check_out_date', '=', context_today())]"/>-->
+                <filter name="check_in_date" string="Today's Check-ins" domain="[('check_in_date', '=', context_today())]"/>
+                <filter name="check_out_date" string="Today's Check-outs" domain="[('check_out_date', '=', context_today())]"/>
             </search>
         </field>
     </record>
