@@ -1,43 +1,73 @@
+<!-- occupancy_report.xml -->
 <odoo>
     <template id="report_occupancy">
         <t t-call="web.html_container">
             <t t-call="web.internal_layout">
                 <div class="container" style="font-family: Arial; color: #333;">
+                    <t t-if="not rooms">
+                        <div class="alert alert-danger" style="padding: 15px; margin: 20px 0;">
+                            لا توجد بيانات متاحة لعرضها
+                        </div>
+                    </t>
 
                     <div class="header" style="text-align: center; margin-bottom: 30px;">
-                        <h1 style="color: #2c3e50;">Hotel Occupancy Report</h1>
+                        <h1 style="color: #2c3e50;">تقرير إشغال الغرف</h1>
                         <hr style="border-top: 2px solid #3498db;"/>
                         <h3>
-                            From
+                            من
                             <span t-esc="date_from"/>
-                            to
+                            إلى
                             <span t-esc="date_to"/>
                         </h3>
                     </div>
 
+                    <div class="summary"
+                         style="margin-bottom: 20px; background-color: #f8f9fa; padding: 15px; border-radius: 5px;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <div>
+                                <strong>إجمالي الغرف:</strong>
+                                <span t-esc="total_rooms"/>
+                            </div>
+                            <div>
+                                <strong>إجمالي الأيام المشغولة:</strong>
+                                <span t-esc="total_occupied_days"/>
+                            </div>
+                            <div>
+                                <strong>متوسط نسبة الإشغال:</strong>
+                                <span t-esc="'%.2f' % avg_occupancy_rate"/>%
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="section" style="margin-bottom: 20px;">
                         <h2 style="color: #3498db; border-bottom: 1px solid #eee; padding-bottom: 5px;">
-                            Rooms Details
+                            تفاصيل الغرف
                         </h2>
                         <table style="width: 100%; border-collapse: collapse;">
                             <thead>
                                 <tr style="background-color: #f8f9fa;">
-                                    <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Room</th>
-                                    <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Floor</th>
-                                    <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Occupied Days
+                                    <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">رقم الغرفة</th>
+                                    <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">الطابق</th>
+                                    <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">نوع المنظر</th>
+                                    <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">الحالة</th>
+                                    <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">السعر/ليلة</th>
+                                    <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">الأيام
+                                        المشغولة
                                     </th>
-                                    <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Occupied Rate
+                                    <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">نسبة الإشغال
                                         (%)
                                     </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr t-foreach="rooms" t-as="room">
-                                    <td t-esc="room['room']" style="padding: 8px; border: 1px solid #ddd;"/>
-                                    <td t-esc="room['floor']" style="padding: 8px; border: 1px solid #ddd;"/>
-                                    <td t-esc="room['occupied_days']" style="padding: 8px; border: 1px solid #ddd;"/>
-                                    <td t-esc="'%.2f' % room['occupancy_rate']"
-                                        style="padding: 8px; border: 1px solid #ddd;"/>
+                                <tr t-foreach="rooms" t-as="room" style="border-bottom: 1px solid #ddd;">
+                                    <td t-esc="room['room']" style="padding: 8px;"/>
+                                    <td t-esc="room['floor']" style="padding: 8px;"/>
+                                    <td t-esc="room['view_type']" style="padding: 8px;"/>
+                                    <td t-esc="room['status']" style="padding: 8px;"/>
+                                    <td t-esc="room['price_per_night']" style="padding: 8px;"/>
+                                    <td t-esc="room['occupied_days']" style="padding: 8px;"/>
+                                    <td t-esc="'%.2f' % room['occupancy_rate']" style="padding: 8px;"/>
                                 </tr>
                             </tbody>
                         </table>

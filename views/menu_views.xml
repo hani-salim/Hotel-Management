@@ -44,7 +44,7 @@
             <field name="view_mode">tree,form</field>
         </record>
         <menuitem id="menu_hotel_booking_list" name="Booking List" parent="menu_hotel_booking"
-                  action="action_hotel_booking"/>
+                  action="action_hotel_booking_overview"/>
 
         <!-- قائمة الخدمات -->
         <menuitem id="menu_hotel_services" name="Services" parent="menu_hotel_main" sequence="60"/>

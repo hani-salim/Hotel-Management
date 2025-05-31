@@ -35,7 +35,11 @@ class RoomAvailabilityWizard(models.TransientModel):
             'view_mode': 'kanban,tree,form',
             'domain': [('id', 'in', available_rooms.ids)],
             'target': 'current',
-            'context': {}
+            'context': {
+                'default_check_in_date': self.check_in,
+                'default_check_out_date': self.check_out,
+                'available_room_ids': available_rooms.ids
+            }
         }
 
 

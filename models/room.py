@@ -2,7 +2,7 @@ from datetime import timedelta
 from email.policy import default
 from warnings import catch_warnings
 
-from odoo import models, fields, api,_
+from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
 
@@ -228,3 +228,20 @@ class HotelRoom(models.Model):
             'context': {'default_room_ids': self.ids},
         }
 
+    def open_bookings_view(self):
+        context = self.env.context
+        available_room_ids = context.get('available_room_ids', False)
+        room_ids = available_room_ids if available_room_ids else self.ids
+
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('New Booking'),
+            'res_model': 'hotel.booking',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'default_available_room_ids': [(6, 0, room_ids)],
+                'default_check_in_date': context.get('default_check_in_date'),
+                'default_check_out_date': context.get('default_check_out_date')
+            }
+        }

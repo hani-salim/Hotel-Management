@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-       <record id="view_room_kanban" model="ir.ui.view">
-    <field name="name">hotel.room.kanban</field>
-    <field name="model">hotel.room</field>
-    <field name="arch" type="xml">
-        <kanban default_group_by="floor" class="room_kanban" js_class="room_kanban">
-            <field name="floor"/>
-            <field name="state"/>
-            <field name="name"/>
-            <field name="view_type"/>
-            <templates>
+        <record id="view_room_kanban" model="ir.ui.view">
+            <field name="name">hotel.room.kanban</field>
+            <field name="model">hotel.room</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="floor" class="room_kanban" js_class="room_kanban">
+                    <field name="floor"/>
+                    <field name="state"/>
+                    <field name="name"/>
+                    <field name="view_type"/>
+                    <templates>
                         <t t-name="kanban-box">
                             <div class="oe_kanban_global_click room_card" t-att-style="'background-color: ' + {
                                 'ready': '#28a745',
@@ -37,13 +37,19 @@
             </field>
         </record>
 
-        <!-- عرض الفورم يبقى كما هو -->
         <record id="view_room_form" model="ir.ui.view">
             <field name="name">hotel.room.form</field>
             <field name="model">hotel.room</field>
             <field name="arch" type="xml">
+                <header>
+                    <button name="open_bookings_view"
+                            string="Create Booking"
+                            type="object"
+                            class="btn-primary"
+                            context="{'default_room_ids': [id]}"
+                            attrs="{'invisible': [('is_available', '=', True)]}"/>
+                </header>
                 <form>
-
                     <sheet>
                         <header>
                             <field name="state" widget="statusbar"/>

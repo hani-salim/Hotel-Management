@@ -12,7 +12,7 @@ class HotelBooking(models.Model):
     _description = 'Booking Request'
 
     guest_id = fields.Many2one('hotel.guest', string='Guest', required=True)
-    room_ids = fields.Many2many('hotel.room', 'booking_ids', string='Room', domain="[('is_available', '=', True)]",
+    room_ids = fields.Many2many('hotel.room', 'booking_ids', string='Room',
                                 required=True)
     check_in_date = fields.Datetime(string='Check-in Date', default=fields.Datetime.now, required=True)
     check_out_date = fields.Datetime(string='Check-out Date', required=True)
@@ -31,6 +31,18 @@ class HotelBooking(models.Model):
         default=lambda self: self.env.company,
         required=True,
         readonly=True
+    )
+    branch_id = fields.Many2one('hotel.branch', string="Branch")
+    user_id = fields.Many2one('res.users', string="Created By", default=lambda self: self.env.user.id)
+    user_center = fields.Boolean(
+        compute='_compute_user_center',
+        search='_search_user_center',
+    )
+    user_filter = fields.Char(string="User Domain Filter")
+    show_button = fields.Boolean(compute='_compute_show_button', default=True)
+    available_room_ids = fields.Many2many(
+        'hotel.room',
+        string="Available Rooms"
     )
 
     @api.depends('check_in_date', 'check_out_date')
@@ -62,7 +74,7 @@ class HotelBooking(models.Model):
         ])
 
         booked_room_ids = conflicting_bookings.mapped('room_ids').ids
-        print(booked_room_ids)
+
 
         available_rooms = self.env['hotel.room'].search([
             ('id', 'not in', booked_room_ids),
@@ -81,7 +93,10 @@ class HotelBooking(models.Model):
                 if not booking.room_ids:
                     raise UserError(_("يجب تحديد غرفة واحدة على الأقل!"))
 
-                # التحقق من وجود فاتورة نشطة للضيف
+                for room in booking.room_ids:
+                    if not room.is_available:
+                        raise UserError(_("الغرف مشغولة حاليا يرجى إعادة تاكيد الطلب لاحقا !"))
+
                 invoice = self.env['account.move'].search([
                     ('partner_id', '=', booking.guest_id.partner_id.id),
                     ('payment_state', '!=', 'paid'),
@@ -89,7 +104,6 @@ class HotelBooking(models.Model):
                 ], limit=1)
 
                 if 1:
-                    # إنشاء فاتورة جديدة إذا لم توجد
                     invoice_line_vals_list = []
 
                     for room in booking.room_ids:
@@ -111,11 +125,13 @@ class HotelBooking(models.Model):
                         invoice_line_vals = {
                             'product_id': product.id,
                             'name': f"إقامة في غرفة {room.name} ({duration} أيام)",
+                            'room_id': room.id,
                             'quantity': duration,
                             'product_uom_id': product.uom_id.id,
                             'price_unit': room.price_per_night,
                             'account_id': account.id,
                             'tax_ids': [(6, 0, product.taxes_id.ids)] if product.taxes_id else False,
+
                         }
                         invoice_line_vals_list.append((0, 0, invoice_line_vals))
 
@@ -148,6 +164,7 @@ class HotelBooking(models.Model):
                         invoice.write({
                             'invoice_line_ids': invoice_line_vals_list,
                         })
+                        booking.invoice_id = invoice.id
 
                 # تحديث حالة الغرف
                 booking.room_ids.write({
@@ -177,16 +194,38 @@ class HotelBooking(models.Model):
 
     def action_cancel(self):
         for booking in self:
-            if booking.invoice_id:
-                booking.invoice_id.button_cancel()
+            try:
+                print(' i am in action cancel')
+                if booking.invoice_id:
+                    print('booking has invoice id')
+                    invoice_lines_to_remove = booking.invoice_id.invoice_line_ids.filtered(
+                        lambda l: l.room_id and l.room_id.id in booking.room_ids.ids
+                    )
+                    print('invoice_lines_to_remove : ', invoice_lines_to_remove)
 
-            if booking.room_ids:
-                booking.room_ids.write({
-                    'current_guest_id': False,
-                    'state': 'ready'
-                })
+                    if invoice_lines_to_remove:
+                        invoice_lines_to_remove.unlink()
 
-            booking.state = 'cancel'
+                        if not booking.invoice_id.invoice_line_ids:
+                            booking.invoice_id.button_cancel()
+
+                    else:
+                        booking.invoice_id.button_cancel()
+                else:
+                    raise UserError('no invoice related in this booking')
+
+                if booking.room_ids:
+                    booking.room_ids.write({
+                        'current_guest_id': False,
+                        'state': 'ready'
+                    })
+
+                booking.state = 'cancel'
+                booking.invoice_id = False
+
+            except Exception as e:
+                _logger.error("Failed to cancel booking %s: %s", booking.id, str(e))
+                raise UserError(_("Failed to cancel booking: %s") % str(e))
 
     @api.constrains('check_in_date', 'check_out_date')
     def _check_dates(self):
@@ -204,3 +243,38 @@ class HotelBooking(models.Model):
             ('create_date', '<', fields.Datetime.now() - timedelta(days=30))
         ])
         cancelled_bookings.unlink()
+
+    def _compute_user_center(self):
+        current_user = self.env.user
+        for booking in self:
+            booking.user_center = bool(
+                booking.user_id.id == current_user.id
+                or current_user.has_group('hotel.group_hotel_manager')
+                or current_user.has_group('hotel.group_hotel_user')
+                or (
+                        current_user.has_group('hotel.group_hotel_branch_manager') and
+                        booking.branch_id.manager_id.user_id.id == current_user.id
+                )
+            )
+
+    def _search_user_center(self, operator, value):
+        current_user = self.env.user
+
+        current_employee = self.env['hr.employee'].search([
+            ('user_id', '=', current_user.id),
+            ('company_id', '=', current_user.company_id.id)
+        ], limit=1)
+
+        if current_user.has_group('hotel.group_hotel_manager'):
+            allowed_ids = self.search([]).ids
+
+        else:
+            allowed_ids = self.search([('user_id', '=', current_user.id)]).ids
+
+        if operator == '=' and value:
+            print(allowed_ids)
+            return [('id', 'in', allowed_ids)]
+        elif operator == '!=' and not value:
+            return [('id', 'not in', allowed_ids)]
+        else:
+            return []

@@ -16,3 +16,9 @@ access_hotel_review_user,hotel.review.user,model_hotel_review,base.group_user,1,
 access_hotel_service_request_manager,hotel.service.request.manager,model_hotel_service_request,hotel.group_hotel_manager,1,1,1,1
 access_hotel_service_request_user,hotel.service.request.user,model_hotel_service_request,hotel.group_hotel_user,1,1,1,0
 access_hotel_service_request_guest,hotel.service.request.guest,model_hotel_service_request,base.group_public,1,1,0,0
+access_hotel_room_availability_wizard_manager,hotel.room.availability.wizard.manager,model_hotel_room_availability_wizard,hotel.group_hotel_manager,1,1,1,1
+access_hotel_room_availability_wizard_user,hotel.room.availability.wizard.user,model_hotel_room_availability_wizard,hotel.group_hotel_user,1,1,1,0
+access_loyalty_redeem_wizard_manager,loyalty.redeem.wizard.manager,model_loyalty_redeem_wizard,hotel.group_hotel_manager,1,1,1,1
+access_loyalty_redeem_wizard_user,loyalty.redeem.wizard.user,model_loyalty_redeem_wizard,hotel.group_hotel_user,1,1,1,0
+access_hotel_occupancy_wizard_manager,hotel.occupancy.wizard.manager,model_hotel_occupancy_wizard,hotel.group_hotel_manager,1,1,1,1
+access_hotel_occupancy_wizard_user,hotel.occupancy.wizard.user,model_hotel_occupancy_wizard,hotel.group_hotel_user,1,1,1,0

@@ -126,13 +126,15 @@ class HotelGuest(models.Model):
         rooms = []
         for room in self.room_ids:
             if self.env['hotel.booking'].search([
+                '&',
                 ('room_ids', 'in', room.id),
-                ('state', '!=', 'done'),
+                ('state', 'not in', ['done','cancel']),
 
             ]):
                 pass
             else:
                 rooms.append(room.id)
+            print("rooms : ", rooms)
 
         if rooms:
             # Create booking
@@ -173,8 +175,6 @@ class HotelGuest(models.Model):
                 'default_guest_id': self.id,
             }
         }
-
-
 
     def get_review_url(self):
         self.ensure_one()

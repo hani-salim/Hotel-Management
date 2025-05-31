@@ -5,18 +5,21 @@
         <field name="name">hotel.booking.tree</field>
         <field name="model">hotel.booking</field>
         <field name="arch" type="xml">
-            <tree create="false" editable="bottom">
+            <tree >
                 <field name="guest_id"/>
                 <field name="room_ids"/>
                 <field name="check_in_date"/>
                 <field name="check_out_date"/>
                 <field name="duration" readonly="1"/>
                 <field name="room_ids" widget="many2many_tags"/>
-                <field name="state" widget="label"/>
-                     <button name="action_confirm" string="Confirm" type="object"
+                <field name="user_id" invisible="0"/>
+                <field name="state" decoration-success="state in ('confirm','done')"
+                       decoration-info="state in ('draft','cancel')" widget="badge"/>
+                <button name="action_confirm" string="Confirm" type="object"
                         class="btn-checkin-custom" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
                 <button name="action_cancel" string="Cancel" type="object"
                         class="btn-checkout-custom" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                <field name="user_center" invisible="1"/>
             </tree>
         </field>
     </record>
@@ -26,27 +29,27 @@
         <field name="model">hotel.booking</field>
         <field name="arch" type="xml">
             <form target="new">
+                <header>
+                    <button name="action_confirm" string="Confirm" type="object"
+                            class="btn-primary" attrs="{'invisible': [('state', '=', 'confirm')]}"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            class="oe_link" attrs="{'invisible': [('state', '=', 'cancel')]}"
+                            style="margin-left: 5px;"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
                 <sheet>
-                    <header>
-                        <field name="state" widget="statusbar"/>
-                    </header>
-
                     <div class="row">
                         <div class="col-md-9">
                             <group>
                                 <field name="guest_id"/>
-                                <field name="state" required="1"/>
-                                <field name="room_ids" widget="many2many_tags" domain="[('is_available', '=', True)]"/>
+                                <field name="room_ids" widget="many2many_tags"  domain="[('id', 'in', available_room_ids)]"/>
                                 <field name="check_in_date"/>
                                 <field name="check_out_date"/>
                                 <field name="duration" readonly="1"/>
+                                <field name="invoice_id" readonly="1"/>
+                                <field name="user_center" invisible="1"/>
+                                <field name="available_room_ids" readonly="1" widget="many2many_tags"/>
                             </group>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="oe_chatter" attrs="{'invisible': [('state', '!=', 'confirmed')]}">
-                                <field name="message_ids" widget="mail_thread"/>
-                            </div>
                         </div>
                     </div>
 
@@ -58,8 +61,29 @@
                                 style="margin-left: 5px;"/>
                     </footer>
                 </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
             </form>
         </field>
+    </record>
+
+    <record id="action_confirm_booking" model="ir.actions.server">
+        <field name="name">Confirm Booking</field>
+        <field name="model_id" ref="model_hotel_booking"/>
+        <field name="binding_model_id" ref="model_hotel_booking"/>
+        <field name="state">code</field>
+        <field name="code">records.action_confirm()</field>
+    </record>
+
+    <record id="action_cancel_booking" model="ir.actions.server">
+        <field name="name">Cancel Booking</field>
+        <field name="model_id" ref="model_hotel_booking"/>
+        <field name="binding_model_id" ref="model_hotel_booking"/>
+        <field name="state">code</field>
+        <field name="code">records.action_cancel()</field>
     </record>
 
     <!-- عرض البحث في الحجوزات -->
@@ -71,10 +95,48 @@
                 <field name="guest_id"/>
                 <field name="room_ids"/>
                 <field name="state"/>
-                <filter name="check_in_date" string="Today's Check-ins" domain="[('check_in_date', '=', context_today())]"/>
-                <filter name="check_out_date" string="Today's Check-outs" domain="[('check_out_date', '=', context_today())]"/>
+                <field name="user_center" invisible="1"/>
+
+                <filter name="check_in_date" string="Today's Check-ins"
+                        domain="[('check_in_date', '=', context_today())]"/>
+                <filter name="check_out_date" string="Today's Check-outs"
+                        domain="[('check_out_date', '=', context_today())]"/>
             </search>
         </field>
+    </record>
+
+    <record id="view_booking_calendar" model="ir.ui.view">
+        <field name="name">hotel.booking.calendar</field>
+        <field name="model">hotel.booking</field>
+        <field name="arch" type="xml">
+            <calendar string="Booking Calendar" date_start="check_in_date" date_stop="check_out_date" color="guest_id">
+                <field name="guest_id"/>
+                <field name="room_ids"/>
+                <field name="user_center" invisible="1"/>
+
+            </calendar>
+        </field>
+    </record>
+
+    <record id="action_hotel_booking_overview" model="ir.actions.act_window">
+        <field name="name">Hotel Bookings Overview</field>
+        <field name="res_model">hotel.booking</field>
+        <field name="view_mode">tree,form,calendar</field>
+        <field name="domain">[('user_center', '=', True)]</field>
+        <field name="context">{
+            'search_default_filter_active': 1,
+            'search_default_filter_today': 1,
+            'default_state': 'draft'
+            }
+        </field>
+        <field name="search_view_id" ref="hotel.view_booking_search"/>
+        <field name="view_ids" eval="[
+        (5, 0, 0),
+        (0, 0, {'view_mode': 'tree', 'view_id': ref('hotel.view_booking_tree')}),
+        (0, 0, {'view_mode': 'form', 'view_id': ref('hotel.view_booking_form')}),
+        (0, 0, {'view_mode': 'calendar', 'view_id': ref('hotel.view_booking_calendar')})
+
+    ]"/>
     </record>
 
 </odoo>

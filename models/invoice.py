@@ -35,3 +35,8 @@ class AccountMoveInherit(models.Model):
         for invoice in self:
             invoice.booking_ids = invoice.guest_id.booking_ids
             invoice.room_ids = invoice.guest_id.room_ids
+
+class AccountMoveLine(models.Model):
+    _inherit = 'account.move.line'
+
+    room_id = fields.Many2one('hotel.room', string="Room")
